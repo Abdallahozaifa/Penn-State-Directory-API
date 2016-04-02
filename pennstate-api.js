@@ -9,8 +9,6 @@
     var querystring = require('querystring');
     var cheerio = require('cheerio');
     
-    // var $ = require('jquery');
-    
   /**
    * psd-api namespace
    *
@@ -37,9 +35,10 @@
                 'email': email
             };
         };
-        
+        /* Penn State Directory link for scraping */
         var dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi';
         
+        /* Validates the passed in parameter options */
         priv.validateOptions = function(str){
             return /^[a-zA-Z]+$/.test(str);
         }
@@ -48,7 +47,9 @@
         
         /* Gets the students information passed in as options */
         priv.getStudentInfo = function(){
+            /* Determines if the option parameter is an object */
             if(typeof options === "object"){
+                /* Checks every value in the options object and Incase the string contains non-alphabet characters */
                 for(var optKey in options){
                     if((typeof options[optKey] != "string") || (priv.validateOptions(options[optKey]) === false)){
                         console.error("Invalid Object format!");
@@ -56,7 +57,10 @@
                     }
                 }
                 priv.optValid === true ? Object.assign(priv.studentInfo,options) : null;
-            }else if(typeof options === "string"){
+            }
+            
+            /* Checks if the passed in parameter is a string to initialize the studentInfo object */
+            else if(typeof options === "string"){
                 var input = options.split(" ");
                 if(input.length === 2){
                     priv.studentInfo.firstName = input[0];
@@ -66,14 +70,14 @@
             }
             console.log(priv.studentInfo);
         }();  
-        /* form object that contains the form data that will be sent in the post request */
+        /* Form object that contains the form data that will be sent in the post request */
         var form = {
             data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName,"","")
         };       
         var stringFormData = querystring.stringify(form.data);
         var contentLength = stringFormData.length;
         
-        /* request options that contain the appropriate request headers, url, body, and method for sending the post request */
+        /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
         priv.reqOptions = {
            headers: {
             'Content-Length': contentLength,
@@ -90,16 +94,16 @@
         priv.removeLinBr = function(arr){
 
         };
-        /* callback that executes after the student information is returned */
+        /* Callback that executes after the student information is returned */
         var callback = function (err, res, body) {
             if(err){
                 throw new Error('Error in retrieving student informaton');
                 return;
             }
-            
-            var $ = cheerio.load(res.body);           
-            /* Queries the student page for the body */
-            
+            /* Library used to parse html  */            
+            var $ = cheerio.load(res.body);
+                       
+            /* Queries the student page for the table headers and table data */           
             $("th").each(function(){
                console.log($(this).text());
                priv.desc.push($(this).text()); 
@@ -123,6 +127,7 @@
         request(priv.reqOptions, callback);
     };
     
+    /* Starts the psd-api */
     psd("Hozaifa Abdalla");
     
     app.listen(8080, function () {
