@@ -43,7 +43,6 @@
             return /^[a-zA-Z]+$/.test(str);
         }
         priv.studentInfo = {}
-        priv.optValid = true;
         
         /* Gets the students information passed in as options */
         priv.getStudentInfo = function(){
@@ -52,11 +51,10 @@
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
                 for(var optKey in options){
                     if((typeof options[optKey] != "string") || (priv.validateOptions(options[optKey]) === false)){
-                        console.error("Invalid Object format!");
-                        priv.optValid = false;
+                        throw new Error("Invalid Object format!");
                     }
                 }
-                priv.optValid === true ? Object.assign(priv.studentInfo,options) : null;
+                Object.assign(priv.studentInfo,options);
             }
             
             /* Checks if the passed in parameter is a string to initialize the studentInfo object */
@@ -117,10 +115,11 @@
             priv.desc.shift();
             console.log(priv.desc);
             console.log(priv.data);
-            var someText = "\nhelloman\n";
-            someText.replace(/(\r\n|\n|\r)/gm,"");
-            var cool = [someText];
-            console.log(cool);            
+            /* Testing purposes only below in order to remove \n characters in each string that is parsed */
+            // var someText = "\nhelloman\n";
+            // someText.replace(/(\r\n|\n|\r)/gm,"");
+            // var cool = [someText];
+            // console.log(cool);            
         };
         
         /* Sends the request  */         
