@@ -1,0 +1,34 @@
+{
+  "name": "psd-api",
+  "version": "0.0.1",
+  "description": "A PennStateDirectory extractor that pretends to be an API",
+  "main": "pennstate-api.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdallahozaifa/Penn-State-Directory-API.git"
+  },
+  "keywords": [
+    "penn state directory",
+    "penn state",
+    "student",
+    "api",
+    "scraper",
+    "scrape"
+  ],
+  "author": [
+      "Hozaifa Abdalla <Abdallahozaifa19527@gmail.com> (http://hozaifaabdalla.com/)",
+      "Kenneth Schnall <kas6570@psu.edu> (https://kensch.com/)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Abdallahozaifa/Penn-State-Directory-API/issues"
+  },
+  "homepage": "https://github.com/Abdallahozaifa/Penn-State-Directory-API#readme",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "jquery": "^2.2.2",
+    "request": "^2.69.0",
+    "querystring": "^0.2.0",
+    "express": "^3.4.4"
+  }
+}
