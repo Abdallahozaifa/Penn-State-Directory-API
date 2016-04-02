@@ -65,15 +65,16 @@
                 else priv.studentInfo.firstName = input[0];
             }
             console.log(priv.studentInfo);
-        }();  
-        /* form object that contains the form data that will be sent in the post request */
+        }();
+
+        /* Form object that contains the form data that will be sent in the post request */
         var form = {
             data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName,"","")
         };       
         var stringFormData = querystring.stringify(form.data);
         var contentLength = stringFormData.length;
         
-        /* request options that contain the appropriate request headers, url, body, and method for sending the post request */
+        /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
         priv.reqOptions = {
            headers: {
             'Content-Length': contentLength,
@@ -90,7 +91,7 @@
         priv.removeLinBr = function(arr){
 
         };
-        /* callback that executes after the student information is returned */
+        /* Callback that executes after the student information is returned */
         var callback = function (err, res, body) {
             if(err){
                 throw new Error('Error in retrieving student informaton');
