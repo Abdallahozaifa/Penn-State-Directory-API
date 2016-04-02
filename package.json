@@ -28,6 +28,7 @@
     "cheerio": "^0.20.0",
     "request": "^2.69.0",
     "querystring": "^0.2.0",
-    "express": "^3.4.4"
+    "express": "^3.4.4",
+    "jquery": "^2.2.2"
   }
 }
