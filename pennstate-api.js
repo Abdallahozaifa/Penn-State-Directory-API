@@ -64,6 +64,7 @@
                 }
                 else priv.studentInfo.firstName = input[0];
             }
+            console.log(priv.studentInfo);
         }();  
         /* form object that contains the form data that will be sent in the post request */
         var form = {
@@ -83,15 +84,12 @@
             method: 'POST'
         };
         
-        priv.student = {
-          name: '',
-          email: '',
-          title: '',
-          campus: '',
-          major: ''
-            
+        priv.student = {};
+        priv.desc = [];
+        priv.data = [];
+        priv.removeLinBr = function(arr){
+
         };
-        
         /* callback that executes after the student information is returned */
         var callback = function (err, res, body) {
             if(err){
@@ -99,19 +97,33 @@
                 return;
             }
             
-            var $ = cheerio.load(res.body);            
+            var $ = cheerio.load(res.body);           
             /* Queries the student page for the body */
-            $("body").filter(function(){
-                // console.log($(this).text());
+            
+            $("th").each(function(){
+               console.log($(this).text());
+               priv.desc.push($(this).text()); 
             });
             
+            $("td").each(function(){
+               console.log($(this).text());
+               priv.data.push($(this).text()); 
+            });
+            
+            priv.desc.shift();
+            console.log(priv.desc);
+            console.log(priv.data);
+            var someText = "\nhelloman\n";
+            someText.replace(/(\r\n|\n|\r)/gm,"");
+            var cool = [someText];
+            console.log(cool);            
         };
         
         /* Sends the request  */         
         request(priv.reqOptions, callback);
     };
     
-    psd("Hozaifa");
+    psd("Hozaifa Abdalla");
     
     app.listen(8080, function () {
         console.log('App listening on port 8080!');
