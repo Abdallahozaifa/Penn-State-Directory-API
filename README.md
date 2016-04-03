@@ -12,7 +12,7 @@ var student = {
     email: "hea113"
 }
 ```
-⋅⋅⋅ name and email is the description for priv.desc and "Hozaifa" and "hea113" are the values or data for priv.data, however for     both we get '\n' characters.⋅⋅⋅
+name and email is the description for priv.desc and "Hozaifa" and "hea113" are the values or data for priv.data, however for     both we get '\n' characters.
 
 +5. Enable the psd-api to search by email or userid <br>
 +6. Validation for email and userid <br>
