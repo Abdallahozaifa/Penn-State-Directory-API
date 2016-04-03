@@ -23,7 +23,9 @@
 
         /* Selectors used for searching HTML */
         priv.selectors = {
-
+            matches: "b", // the number of matches for each student
+            desc: "th", // the descriptions of the student such as name,email,..etc
+            data: "td" // the data for the descriptions
         };
 
         /* Generates new query object for the form */
@@ -102,17 +104,17 @@
             var $ = cheerio.load(res.body);
 
             /* Finds if there is a match */
-            if ($("b").text().indexOf("0 matches", 0) == 0) {
+            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0) {
                 console.error("Student was not found!");
             }
             else {
                 /* Queries the student page for the table headers and table data */
-                $("th").each(function() {
+                $(priv.selectors.desc).each(function() {
                     console.log($(this).text());
                     priv.desc.push($(this).text());
                 });
 
-                $("td").each(function() {
+                $(priv.selectors.data).each(function() {
                     console.log($(this).text());
                     priv.data.push($(this).text());
                 });
@@ -129,8 +131,8 @@
 
     /* Starts the psd-api */
     psd({
-        firstName: "Jon",
-        lastName: "Otto"
+        firstName: "Hozaifa",
+        lastName: "Abdalla"
     });
 
     app.listen(process.env.PORT, process.env.IP);
