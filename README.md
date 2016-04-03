@@ -19,9 +19,4 @@ var student = {
 +7. Enable the psd-api to pass in an array of students and have it return an array of student objects <br>
  
 <br><b>+ is Bonus</b>
- 
-<style>
-    #work{
-        text-decoration: underline;
-    }
-</style>
+
