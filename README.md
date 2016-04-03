@@ -1,7 +1,7 @@
 # Penn-State-Directory-API
 API that obtains student information from the Penn State Directory.
-
-### Things to be done
+<br>
+## <h2 id="work">Things to be done</h2>
 1. ~~Display Error Message if student is not found~~ 
 2. ~~Checks if input is an object or string~~
 3. ~~Allows you to search by firstname and lastname or just first name~~
@@ -20,3 +20,8 @@ name and email is the description for priv.desc and "Hozaifa" and "hea113" are t
  
 <br><b>+ is Bonus</b>
  
+<style>
+    #work{
+        text-decoration: underline;
+    }
+</style>
