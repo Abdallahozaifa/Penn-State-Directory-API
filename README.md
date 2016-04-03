@@ -14,8 +14,9 @@ var student = {
 ```
 ⋅⋅⋅ name and email is the description for priv.desc and "Hozaifa" and "hea113" are the values or data for priv.data, however for     both we get '\n' characters.⋅⋅⋅
 
-5. Enable the psd-api to search by email or userid
-6. Validation for email and userid
-7. Enable the psd-api to pass in an array of students and have it return an array of student objects
-
++5. Enable the psd-api to search by email or userid <br>
++6. Validation for email and userid <br>
++7. Enable the psd-api to pass in an array of students and have it return an array of student objects <br>
+ 
+<br><b>+ is Bonus</b>
  
