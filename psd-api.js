@@ -91,8 +91,11 @@
         priv.student = {};
         priv.desc = [];
         priv.data = [];
+        /* Removes all line breaks in the data retrieved */
         priv.removeLinBr = function(arr) {
-
+            for(var str in arr){
+                arr[str] = arr[str].replace(/\n+/g, '');
+            }
         };
         /* Callback that executes after the student information is returned */
         var callback = function(err, res, html) {
@@ -110,16 +113,16 @@
             else {
                 /* Queries the student page for the table headers and table data */
                 $(priv.selectors.desc).each(function() {
-                    console.log($(this).text());
                     priv.desc.push($(this).text());
                 });
 
                 $(priv.selectors.data).each(function() {
-                    console.log($(this).text());
                     priv.data.push($(this).text());
                 });
 
                 priv.desc.shift();
+                priv.removeLinBr(priv.desc);
+                priv.removeLinBr(priv.data);
                 console.log(priv.desc);
                 console.log(priv.data);
             }
