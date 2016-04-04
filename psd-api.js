@@ -13,7 +13,7 @@
      * psd-api namespace
      *
      */
-    var psd = function(options) {
+    var getStudentInfo = function(options) {
         var pub = {};
         var priv = {};
         /* Search configuration */
@@ -44,10 +44,10 @@
         priv.validateOptions = function(str) {
             return /^[a-zA-Z]+$/.test(str);
         };
-        priv.studentInfo = {};
 
-        /* Gets the students information passed in as options */
-        priv.getStudentInfo = function() {
+        priv.studentInfo = {};
+        /* Initializes the students information passed in as options */
+        priv.initStudentInfo = function() {
             /* Determines if the option parameter is an object */
             if (typeof options === "object") {
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
@@ -68,7 +68,6 @@
                 }
                 else priv.studentInfo.firstName = input[0];
             }
-            console.log(priv.studentInfo);
         }();
         /* Form object that contains the form data that will be sent in the post request */
         var form = {
@@ -93,7 +92,7 @@
         priv.data = [];
         /* Removes all line breaks in the data retrieved */
         priv.removeLinBr = function(arr) {
-            for(var str in arr){
+            for (var str in arr) {
                 arr[str] = arr[str].replace(/\n+/g, '');
             }
         };
@@ -102,6 +101,7 @@
             if (err) {
                 throw new Error('Error in retrieving student informaton');
             }
+
 
             /* Library used to parse html  */
             var $ = cheerio.load(res.body);
@@ -119,24 +119,46 @@
                 $(priv.selectors.data).each(function() {
                     priv.data.push($(this).text());
                 });
-
+                // console.log(html);
                 priv.desc.shift();
                 priv.removeLinBr(priv.desc);
                 priv.removeLinBr(priv.data);
-                console.log(priv.desc);
+                // console.log(priv.desc);
                 console.log(priv.data);
             }
+
         };
 
         /* Sends the request  */
         request(priv.reqOptions, callback);
     };
 
+    /* Allows you to pass in array of students for searching */
+    var psd = function(input) {
+        if (Array.isArray(input)) {
+            for (var student in input) {
+                console.log("student is " + input[student]);
+                getStudentInfo(input[student]);
+            };
+        }
+        else if (typeof input === 'object') {
+            getStudentInfo(input);
+        }
+        else if (typeof input === 'string') {
+            getStudentInfo(input);
+        }
+    };
     /* Starts the psd-api */
-    psd({
+    psd([{
         firstName: "Hozaifa",
         lastName: "Abdalla"
-    });
+    }, {
+        firstName: "Yehya",
+        lastName: "Awad"
+    },{
+        firstName: "Kenneth",
+        lastName: "Schnall"
+    }]);
 
     app.listen(process.env.PORT, process.env.IP);
 }).call(this);
