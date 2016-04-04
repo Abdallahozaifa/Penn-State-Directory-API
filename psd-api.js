@@ -16,6 +16,7 @@
     var getStudentInfo = function(options) {
         var pub = {};
         var priv = {};
+
         /* Search configuration */
         priv.config = {
             year: "" // student year --> undergraduate
@@ -24,7 +25,7 @@
         /* Selectors used for searching HTML */
         priv.selectors = {
             matches: "b", // the number of matches for each student
-            desc: "th", // the descriptions of the student such as name,email,..etc
+            desc: "th", // the descriptions of the student such as name, email, etc
             data: "td" // the data for the descriptions
         };
 
@@ -37,6 +38,7 @@
                 'email': email
             };
         };
+
         /* Penn State Directory link for scraping */
         var dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi';
 
@@ -46,6 +48,7 @@
         };
 
         priv.studentInfo = {};
+
         /* Initializes the students information passed in as options */
         priv.initStudentInfo = function() {
             /* Determines if the option parameter is an object */
@@ -62,6 +65,7 @@
             /* Checks if the passed in parameter is a string to initialize the studentInfo object */
             else if (typeof options === "string") {
                 var input = options.split(" ");
+
                 if (input.length === 2) {
                     priv.studentInfo.firstName = input[0];
                     priv.studentInfo.lastName = input[1];
@@ -69,10 +73,12 @@
                 else priv.studentInfo.firstName = input[0];
             }
         }();
+
         /* Form object that contains the form data that will be sent in the post request */
         var form = {
             data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName, "", "")
         };
+
         var stringFormData = querystring.stringify(form.data);
         var contentLength = stringFormData.length;
 
@@ -90,12 +96,14 @@
         priv.student = {};
         priv.desc = [];
         priv.data = [];
+
         /* Removes all line breaks in the data retrieved */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
                 arr[str] = arr[str].replace(/\n+/g, '');
             }
         };
+        
         /* Callback that executes after the student information is returned */
         var callback = function(err, res, html) {
             if (err) {
