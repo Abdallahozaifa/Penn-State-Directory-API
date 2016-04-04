@@ -1,7 +1,7 @@
 /****************************************
  *     PENN STATE DIRECTORY API         *
  ****************************************/
-(function() {
+ (function() {
 
     var express = require('express');
     var app = express();
@@ -13,7 +13,7 @@
      * psd-api namespace
      *
      */
-    var getStudentInfo = function(options) {
+     var getStudentInfo = function(options) {
         var pub = {};
         var priv = {};
 
@@ -34,8 +34,8 @@
             return {
                 'cn': firstName,
                 'sn': lastName,
-                'userid': userId,
-                'email': email
+                'uid': userId, // name=uid in search page instead of id=userid
+                'mail': email // name=mail in search page instead of id=email
             };
         };
 
@@ -52,10 +52,45 @@
             return str.endsWith("@psu.edu");
         };
 
+        /* Checks if passed in parameter contains a number, which means it is an id */
+        /* This validation happens AFTER checking if the string is an email */
+        priv.validateUserId = function(str) {
+            var isNumber;
+
+            var userId = str.match(/\d+/g);
+
+            if (userId != null) {
+                isNumber = true;
+            } else {
+                isNumber = false;
+            }
+
+            return isNumber;
+        };
+
         priv.studentInfo = {};
 
         /* Initializes the students information passed in as options */
         priv.initStudentInfo = function() {
+
+            /* USE CASES:
+            The user can request data two ways:
+                An object containing multiple strings:
+                    psd([{
+                        firstName: "Hozaifa",
+                        lastName: "Abdalla"
+                    }, {
+                        email: "kenneth.schnall@psu.edu"
+                    }, {
+                        id: "kas6570"
+                    }]);
+
+                A single string:
+                    psd("kensch@psu.edu");
+                    psd("Hozaifa Abdalla");
+                    psd("kas6570");                    
+            */
+
             /* Determines if the option parameter is an object */
             if (typeof options === "object") {
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
@@ -67,21 +102,46 @@
                 Object.assign(priv.studentInfo, options);
             }
 
-            /* Checks if the passed in parameter is a string to initialize the studentInfo object */
+            /* Checks if the passed in parameter is a string */
             else if (typeof options === "string") {
-                var input = options.split(" ");
-
-                if (input.length === 2) {
-                    priv.studentInfo.firstName = input[0];
-                    priv.studentInfo.lastName = input[1];
+                /* Checks if passed in parameter is an email */
+                if (priv.validateEmail(options)) {
+                    priv.studentInfo.firstName = "";
+                    priv.studentInfo.lastName = "";
+                    priv.studentInfo.userId = "";
+                    priv.studentInfo.email = options;
                 }
-                else priv.studentInfo.firstName = input[0];
+
+                /* Checks if passed in parameter is an id */
+                else if (priv.validateUserId(options)) {
+                    priv.studentInfo.firstName = "";
+                    priv.studentInfo.lastName = "";
+                    priv.studentInfo.userId = options;
+                    priv.studentInfo.email = "";
+                }
+
+                /* Passed in parameter is not an object, email, or id, so it must be a name */
+                else {
+                    var input = options.split(" ");
+
+                    if (input.length === 2) {
+                        priv.studentInfo.firstName = input[0];
+                        priv.studentInfo.lastName = input[1];
+                    }
+                    else {
+                        priv.studentInfo.firstName = input[0];
+                        priv.studentInfo.lastName = "";
+                    }
+
+                    priv.studentInfo.userId = "";
+                    priv.studentInfo.email = "";
+                }
             }
         }();
 
         /* Form object that contains the form data that will be sent in the post request */
         var form = {
-            data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName, "", "")
+            data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName, priv.studentInfo.userId, priv.studentInfo.email)
         };
 
         var stringFormData = querystring.stringify(form.data);
@@ -114,7 +174,6 @@
             if (err) {
                 throw new Error('Error in retrieving student informaton');
             }
-
 
             /* Library used to parse html  */
             var $ = cheerio.load(res.body);
@@ -173,13 +232,35 @@
 
     psd("Manan Patel");
 
+    psd("kas6570@psu.edu");
+
+    psd("kas6570");
+
     app.listen(process.env.PORT, process.env.IP);
 }).call(this);
 
 /* OUTPUT BELOW!
+
 { firstName: 'Hozaifa', lastName: 'Abdalla' }
 { firstName: 'Yehya', lastName: 'Awad' }
 { firstName: 'Kenneth', lastName: 'Schnall' }
+[ 'MANAN VIBHU PATEL',
+  'mvp5542@psu.edu',
+  'mvp5542@psu.edu',
+  '2130 GLENDALE AVEERIE, PA 16510',
+  '+1 412 801 1514',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'COMPUTER SCIENCE',
+  'MANAN PATEL',
+  'MANAN JIGNESHKUMAR PATEL' ]
+[ 'KENNETH ALEXANDER SCHNALL',
+  'kas6570@psu.edu',
+  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
+  ' https://kensch.com',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'ENGINEERING' ]
 [ 'YEHYA HOSSAM SAID ABDALLA AWAD',
   'yha5009@psu.edu',
   'HackPSU@psu.eduyehya@psu.eduawad@psu.eduyha5009@psu.edu',
@@ -188,16 +269,25 @@
   'UNDERGRAD STUDENT',
   'PENN STATE ERIE, THE BEHREND COLLEGE',
   'SOFTWARE ENGINEERING' ]
-[ 'KENNETH ALEXANDER SCHNALL',
-  'kas6570@psu.edu',
-  'kas6570@psu.edu',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'ENGINEERING' ]
 [ 'HOZAIFA ELHAFIZ ABDALLA',
   'hea113@psu.edu',
   'hea113@psu.edu',
   'UNDERGRAD STUDENT',
   'PENN STATE ERIE, THE BEHREND COLLEGE',
   'SOFTWARE ENGINEERING' ]
+[ 'KENNETH ALEXANDER SCHNALL',
+  'kas6570@psu.edu',
+  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
+  ' https://kensch.com',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'ENGINEERING' ]
+[ 'KENNETH ALEXANDER SCHNALL',
+  'kas6570@psu.edu',
+  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
+  ' https://kensch.com',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'ENGINEERING' ]
+
 */
