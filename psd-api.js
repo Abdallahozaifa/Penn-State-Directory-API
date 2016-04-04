@@ -47,6 +47,11 @@
             return /^[a-zA-Z]+$/.test(str);
         };
 
+        /* Checks if passed in parameter is an email */
+        priv.validateEmail = function(str) {
+            return str.endsWith("@psu.edu");
+        };
+
         priv.studentInfo = {};
 
         /* Initializes the students information passed in as options */
@@ -103,7 +108,7 @@
                 arr[str] = arr[str].replace(/\n+/g, '');
             }
         };
-        
+
         /* Callback that executes after the student information is returned */
         var callback = function(err, res, html) {
             if (err) {
@@ -153,6 +158,7 @@
             getStudentInfo(input);
         }
     };
+
     /* Starts the psd-api */
     psd([{
         firstName: "Hozaifa",
