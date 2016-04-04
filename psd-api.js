@@ -137,14 +137,11 @@
     var psd = function(input) {
         if (Array.isArray(input)) {
             for (var student in input) {
-                console.log("student is " + input[student]);
+                console.log(input[student]);
                 getStudentInfo(input[student]);
             };
         }
-        else if (typeof input === 'object') {
-            getStudentInfo(input);
-        }
-        else if (typeof input === 'string') {
+        else {
             getStudentInfo(input);
         }
     };
@@ -155,10 +152,38 @@
     }, {
         firstName: "Yehya",
         lastName: "Awad"
-    },{
+    }, {
         firstName: "Kenneth",
         lastName: "Schnall"
     }]);
 
+    psd("Manan Patel");
+
     app.listen(process.env.PORT, process.env.IP);
 }).call(this);
+
+/* OUTPUT BELOW!
+{ firstName: 'Hozaifa', lastName: 'Abdalla' }
+{ firstName: 'Yehya', lastName: 'Awad' }
+{ firstName: 'Kenneth', lastName: 'Schnall' }
+[ 'YEHYA HOSSAM SAID ABDALLA AWAD',
+  'yha5009@psu.edu',
+  'HackPSU@psu.eduyehya@psu.eduawad@psu.eduyha5009@psu.edu',
+  ' http://www.personal.psu.edu/yha5009',
+  '+1 717 460 6012',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'SOFTWARE ENGINEERING' ]
+[ 'KENNETH ALEXANDER SCHNALL',
+  'kas6570@psu.edu',
+  'kas6570@psu.edu',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'ENGINEERING' ]
+[ 'HOZAIFA ELHAFIZ ABDALLA',
+  'hea113@psu.edu',
+  'hea113@psu.edu',
+  'UNDERGRAD STUDENT',
+  'PENN STATE ERIE, THE BEHREND COLLEGE',
+  'SOFTWARE ENGINEERING' ]
+*/
