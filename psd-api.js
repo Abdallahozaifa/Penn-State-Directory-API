@@ -16,8 +16,12 @@
     var getStudent = function(options) {
         var pub = {};
         var priv = {};
+        
         priv.Student = {},
-        priv.form = {};
+        priv.form = {},
+        priv.desc = [],
+        priv.data = [];
+        
         /* Search configuration */
         priv.config = {
             year: "" // student year --> undergraduate
@@ -141,10 +145,6 @@
             method: 'POST'
         };
 
-        priv.student = {};
-        priv.desc = [];
-        priv.data = [];
-
         /* Removes all line breaks in the data retrieved */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
@@ -178,6 +178,7 @@
             // console.log(priv.desc);
             console.log(priv.data);
         };
+        
         /* Finds the students info on the given html page */
         priv.findStudent = function(htmlPage) {
             /* Library used to parse html  */
