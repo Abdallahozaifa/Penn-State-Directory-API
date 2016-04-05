@@ -16,12 +16,12 @@
     var getStudent = function(options) {
         var pub = {};
         var priv = {};
-        
+
         priv.Student = {},
-        priv.form = {},
-        priv.desc = [],
-        priv.data = [];
-        
+            priv.form = {},
+            priv.desc = [],
+            priv.data = [];
+
         /* Search configuration */
         priv.config = {
             year: "" // student year --> undergraduate
@@ -35,11 +35,11 @@
         };
 
         /* Generates new query object for the form */
-        priv.newQuery = function(firstName, lastName, userId, email) {
+        priv.newQuery = function(firstName, lastName, userID, email) {
             return {
                 'cn': firstName,
                 'sn': lastName,
-                'uid': userId, // name=uid in search page instead of id=userid
+                'uid': userID, // name=uid in search page instead of id=userID
                 'mail': email // name=mail in search page instead of id=email
             };
         };
@@ -58,9 +58,9 @@
 
             /* Checks if passed in parameter contains a number, which means it is an id */
             /* This validation happens AFTER checking if the string is an email */
-            userId: function(str) {
-                var isNumber, userId = str.match(/\d+/g);
-                if (userId != null) {
+            userID: function(str) {
+                var isNumber, userID = str.match(/\d+/g);
+                if (userID != null) {
                     isNumber = true;
                 }
                 else {
@@ -68,13 +68,33 @@
                 }
                 return isNumber;
             },
+            
+            /* Validates the userID so that the format can either be xxxDDD or xxxDDDD, x-> letter D-> digit */
 
             /* Determines if the option parameter is an object */
             isobjectValid: function() {
                 if (typeof options === "object") {
                     /* Checks every value in the options object and Incase the string contains non-alphabet characters */
                     for (var optKey in options) {
-                        if ((typeof options[optKey] != "string") || (priv.validate.options(options[optKey]) === false)) {
+                        /* Validates first and last name */
+                        if (optKey === "firstName" || optKey === "lastName") {
+                            if ((typeof options[optKey] != "string")) {
+                                throw new Error("Invalid Object format!");
+                            }
+                        }
+
+                        /* Validates the user id */
+                        else if (optKey === "userID") {
+
+                        }
+
+                        /* Validates the email */
+                        else if (optKey === "email") {
+                            if ((priv.validate.email(options[optKey]) === false)) {
+                                throw new Error("Invalid Object format!");
+                            }
+                        }
+                        else {
                             throw new Error("Invalid Object format!");
                         }
                     }
@@ -84,10 +104,10 @@
         };
 
         /* Fills the student info object  */
-        priv.fillStudentObj = function(firstName, lastName, userId, email) {
+        priv.fillStudentObj = function(firstName, lastName, userID, email) {
             priv.Student.firstName = firstName;
             priv.Student.lastName = lastName;
-            priv.Student.userId = userId;
+            priv.Student.userID = userID;
             priv.Student.email = email;
         };
 
@@ -99,7 +119,7 @@
             }
 
             /* Checks if passed in parameter is an id */
-            else if (priv.validate.userId(options)) {
+            else if (priv.validate.userID(options)) {
                 priv.fillStudentObj("", "", options, "");
             }
 
@@ -129,10 +149,10 @@
         }();
 
         /* Form object that will contain the form data that will be sent in the post request */
-        priv.form.data = priv.newQuery(priv.Student.firstName, priv.Student.lastName, priv.Student.userId, priv.Student.email);
+        priv.form.data = priv.newQuery(priv.Student.firstName, priv.Student.lastName, priv.Student.userID, priv.Student.email);
         priv.form.stringFormData = querystring.stringify(priv.form.data); /* Contains the stringified data */
         priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent over */
-        priv.form.dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi';  /* Penn State Directory link for scraping */
+        priv.form.dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi'; /* Penn State Directory link for scraping */
 
         /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
         priv.form.reqOptions = {
@@ -161,7 +181,7 @@
                 return true;
             }
         };
-        
+
         /* Queries the student page for the table headers and table data */
         priv.queryPage = function($) {
             $(priv.selectors.desc).each(function() {
@@ -178,12 +198,12 @@
             // console.log(priv.desc);
             console.log(priv.data);
         };
-        
+
         /* Finds the students info on the given html page */
         priv.findStudent = function(htmlPage) {
             /* Library used to parse html  */
             var $ = cheerio.load(htmlPage);
-            
+
             /* Checks if the student is found */
             if (priv.isStudentFound($)) {
                 priv.queryPage($);
@@ -221,74 +241,21 @@
         }
     };
 
-    /* Starts the psd-api */
-    // psd([{
-    //     firstName: "Hozaifa",
-    //     lastName: "Abdalla"
-    // }, {
-    //     firstName: "Yehya",
-    //     lastName: "Awad"
-    // }, {
-    //     firstName: "Kenneth",
-    //     lastName: "Schnall"
-    // }]);
+    /* Starts the psd-api below */
 
-    // psd("Nicholas Cecchetti");
+    /* SAMPLE OBJECT TESTCASES */
+    psd({firstName: "Hozaifa"}); /* PASSED */
+    // psd({lastName: "Abdalla"}); /* PASSED */
+    // psd({email: "hea113"}); /* PASSED */
+    // psd({userID: "hea113"}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: ""}); /* PASSED */
+    // psd({firstName: "", lastName: "Abdalla"}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: "Abdalla"}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "hea113"}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: ""}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "hea113", email: "hea113@psu.edu"}); /* PASSED */
+    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "", email: "hea113@psu.edu"}); /* PASSED */
 
-    psd("Hozaifa Abdalla");
 
     app.listen(process.env.PORT, process.env.IP);
 }).call(this);
-
-/* OUTPUT BELOW!
-
-{ firstName: 'Hozaifa', lastName: 'Abdalla' }
-{ firstName: 'Yehya', lastName: 'Awad' }
-{ firstName: 'Kenneth', lastName: 'Schnall' }
-[ 'MANAN VIBHU PATEL',
-  'mvp5542@psu.edu',
-  'mvp5542@psu.edu',
-  '2130 GLENDALE AVEERIE, PA 16510',
-  '+1 412 801 1514',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'COMPUTER SCIENCE',
-  'MANAN PATEL',
-  'MANAN JIGNESHKUMAR PATEL' ]
-[ 'KENNETH ALEXANDER SCHNALL',
-  'kas6570@psu.edu',
-  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
-  ' https://kensch.com',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'ENGINEERING' ]
-[ 'YEHYA HOSSAM SAID ABDALLA AWAD',
-  'yha5009@psu.edu',
-  'HackPSU@psu.eduyehya@psu.eduawad@psu.eduyha5009@psu.edu',
-  ' http://www.personal.psu.edu/yha5009',
-  '+1 717 460 6012',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'SOFTWARE ENGINEERING' ]
-[ 'HOZAIFA ELHAFIZ ABDALLA',
-  'hea113@psu.edu',
-  'hea113@psu.edu',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'SOFTWARE ENGINEERING' ]
-[ 'KENNETH ALEXANDER SCHNALL',
-  'kas6570@psu.edu',
-  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
-  ' https://kensch.com',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'ENGINEERING' ]
-[ 'KENNETH ALEXANDER SCHNALL',
-  'kas6570@psu.edu',
-  'kenneth.schnall@psu.edukensch@psu.edukas6570@psu.edu',
-  ' https://kensch.com',
-  'UNDERGRAD STUDENT',
-  'PENN STATE ERIE, THE BEHREND COLLEGE',
-  'ENGINEERING' ]
-
-*/
