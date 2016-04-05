@@ -18,9 +18,9 @@
         var priv = {};
 
         priv.Student = {},
-            priv.form = {},
-            priv.desc = [],
-            priv.data = [];
+        priv.form = {},
+        priv.desc = [],
+        priv.data = [];
 
         /* Search configuration */
         priv.config = {
@@ -185,16 +185,16 @@
                 return true;
             }
         };
-        
+
         /* Formats the data that is received from the html page by removing first entry and line breaks */
-        priv.formatData = function(){
+        priv.formatData = function() {
             priv.desc.shift();
             priv.removeLinBr(priv.desc);
             priv.removeLinBr(priv.data);
         };
-        
+
         /* Queries the html page for the students information */
-        priv.queryPage = function($){
+        priv.extractData = function($) {
             $(priv.selectors.desc).each(function() {
                 priv.desc.push($(this).text());
             });
@@ -203,10 +203,10 @@
                 priv.data.push($(this).text());
             });
         };
-        
+
         /* Queries the student page for the table headers and table data */
         priv.getStudentInfo = function($) {
-            priv.queryPage($);
+            priv.extractData($);
             priv.formatData();
             // console.log(priv.desc);
             console.log(priv.data);
@@ -257,7 +257,9 @@
     /* Starts the psd-api below */
 
     /* SAMPLE OBJECT TESTCASES */
-    psd({firstName: "Hozaifa"}); /* PASSED */
+    psd({
+        firstName: "Hozaifa"
+    }); /* PASSED */
     // psd({lastName: "Abdalla"}); /* PASSED */
     // psd({email: "hea113"}); /* PASSED */
     // psd({userID: "hea113"}); /* PASSED */
