@@ -68,8 +68,11 @@
                 }
                 return isNumber;
             },
-            
+
             /* Validates the userID so that the format can either be xxxDDD or xxxDDDD, x-> letter D-> digit */
+            userID: function(str){
+                
+            },
 
             /* Determines if the option parameter is an object */
             isobjectValid: function() {
@@ -244,7 +247,9 @@
     /* Starts the psd-api below */
 
     /* SAMPLE OBJECT TESTCASES */
-    psd({firstName: "Hozaifa"}); /* PASSED */
+    psd({
+        firstName: "Hozaifa"
+    }); /* PASSED */
     // psd({lastName: "Abdalla"}); /* PASSED */
     // psd({email: "hea113"}); /* PASSED */
     // psd({userID: "hea113"}); /* PASSED */
