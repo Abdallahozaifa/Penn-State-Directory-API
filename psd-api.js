@@ -1,7 +1,7 @@
 /****************************************
  *     PENN STATE DIRECTORY API         *
  ****************************************/
- (function() {
+(function() {
 
     var express = require('express');
     var app = express();
@@ -13,10 +13,11 @@
      * psd-api namespace
      *
      */
-     var getStudentInfo = function(options) {
+    var getStudent = function(options) {
         var pub = {};
         var priv = {};
-
+        priv.Student = {},
+        priv.form = {};
         /* Search configuration */
         priv.config = {
             year: "" // student year --> undergraduate
@@ -39,122 +40,104 @@
             };
         };
 
-        /* Penn State Directory link for scraping */
-        var dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi';
+        /* Validation object that contains the different validation methods */
+        priv.validate = {
+            /* Validates the passed in parameter options */
+            options: function(str) {
+                return /^[a-zA-Z]+$/.test(str);
+            },
 
-        /* Validates the passed in parameter options */
-        priv.validateOptions = function(str) {
-            return /^[a-zA-Z]+$/.test(str);
-        };
+            /* Checks if passed in parameter is an email */
+            email: function(str) {
+                return str.endsWith("@psu.edu");
+            },
 
-        /* Checks if passed in parameter is an email */
-        priv.validateEmail = function(str) {
-            return str.endsWith("@psu.edu");
-        };
-
-        /* Checks if passed in parameter contains a number, which means it is an id */
-        /* This validation happens AFTER checking if the string is an email */
-        priv.validateUserId = function(str) {
-            var isNumber;
-
-            var userId = str.match(/\d+/g);
-
-            if (userId != null) {
-                isNumber = true;
-            } else {
-                isNumber = false;
-            }
-
-            return isNumber;
-        };
-
-        priv.studentInfo = {};
-
-        /* Initializes the students information passed in as options */
-        priv.initStudentInfo = function() {
-
-            /* USE CASES:
-            The user can request data two ways:
-                An object containing multiple strings:
-                    psd([{
-                        firstName: "Hozaifa",
-                        lastName: "Abdalla"
-                    }, {
-                        email: "kenneth.schnall@psu.edu"
-                    }, {
-                        id: "kas6570"
-                    }]);
-
-                A single string:
-                    psd("kensch@psu.edu");
-                    psd("Hozaifa Abdalla");
-                    psd("kas6570");                    
-            */
+            /* Checks if passed in parameter contains a number, which means it is an id */
+            /* This validation happens AFTER checking if the string is an email */
+            userId: function(str) {
+                var isNumber, userId = str.match(/\d+/g);
+                if (userId != null) {
+                    isNumber = true;
+                }
+                else {
+                    isNumber = false;
+                }
+                return isNumber;
+            },
 
             /* Determines if the option parameter is an object */
-            if (typeof options === "object") {
-                /* Checks every value in the options object and Incase the string contains non-alphabet characters */
-                for (var optKey in options) {
-                    if ((typeof options[optKey] != "string") || (priv.validateOptions(options[optKey]) === false)) {
-                        throw new Error("Invalid Object format!");
+            isobjectValid: function() {
+                if (typeof options === "object") {
+                    /* Checks every value in the options object and Incase the string contains non-alphabet characters */
+                    for (var optKey in options) {
+                        if ((typeof options[optKey] != "string") || (priv.validate.options(options[optKey]) === false)) {
+                            throw new Error("Invalid Object format!");
+                        }
                     }
+                    return true;
                 }
-                Object.assign(priv.studentInfo, options);
+            }
+        };
+
+        /* Fills the student info object  */
+        priv.fillStudentObj = function(firstName, lastName, userId, email) {
+            priv.Student.firstName = firstName;
+            priv.Student.lastName = lastName;
+            priv.Student.userId = userId;
+            priv.Student.email = email;
+        };
+
+        /* Initializes the Student object depending on the passed in string */
+        priv.initStrStudent = function() {
+            /* Checks if passed in parameter is an email */
+            if (priv.validate.email(options)) {
+                priv.fillStudentObj("", "", "", options);
+            }
+
+            /* Checks if passed in parameter is an id */
+            else if (priv.validate.userId(options)) {
+                priv.fillStudentObj("", "", options, "");
+            }
+
+            /* Passed in parameter is not an object, email, or id, so it must be a name */
+            else {
+                var input = options.split(" ");
+                if (input.length === 2) {
+                    priv.fillStudentObj(input[0], input[1]);
+                }
+                else {
+                    priv.fillStudentObj(input[0], "", "", "");
+                }
+            }
+        }
+
+        /* Initializes the students information passed in as options */
+        priv.initStudent = function() {
+            /* Object is valid */
+            if (priv.validate.isobjectValid()) {
+                Object.assign(priv.Student, options);
             }
 
             /* Checks if the passed in parameter is a string */
             else if (typeof options === "string") {
-                /* Checks if passed in parameter is an email */
-                if (priv.validateEmail(options)) {
-                    priv.studentInfo.firstName = "";
-                    priv.studentInfo.lastName = "";
-                    priv.studentInfo.userId = "";
-                    priv.studentInfo.email = options;
-                }
-
-                /* Checks if passed in parameter is an id */
-                else if (priv.validateUserId(options)) {
-                    priv.studentInfo.firstName = "";
-                    priv.studentInfo.lastName = "";
-                    priv.studentInfo.userId = options;
-                    priv.studentInfo.email = "";
-                }
-
-                /* Passed in parameter is not an object, email, or id, so it must be a name */
-                else {
-                    var input = options.split(" ");
-
-                    if (input.length === 2) {
-                        priv.studentInfo.firstName = input[0];
-                        priv.studentInfo.lastName = input[1];
-                    }
-                    else {
-                        priv.studentInfo.firstName = input[0];
-                        priv.studentInfo.lastName = "";
-                    }
-
-                    priv.studentInfo.userId = "";
-                    priv.studentInfo.email = "";
-                }
+                priv.initStrStudent();
             }
         }();
 
-        /* Form object that contains the form data that will be sent in the post request */
-        var form = {
-            data: priv.newQuery(priv.studentInfo.firstName, priv.studentInfo.lastName, priv.studentInfo.userId, priv.studentInfo.email)
-        };
-
-        var stringFormData = querystring.stringify(form.data);
-        var contentLength = stringFormData.length;
+        /* Form object that will contain the form data that will be sent in the post request */
+        priv.form.data = priv.newQuery(priv.Student.firstName, priv.Student.lastName, priv.Student.userId, priv.Student.email);
+        priv.form.stringFormData = querystring.stringify(priv.form.data); /* Contains the stringified data */
+        priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent over */
+        priv.form.dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi';  /* Penn State Directory link for scraping */
 
         /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
-        priv.reqOptions = {
+        priv.form.reqOptions = {
             headers: {
-                'Content-Length': contentLength,
+                'Content-Length': priv.form.contentLength,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            url: dirLink,
-            body: stringFormData,
+            url: priv.form.dirLink,
+            body: priv.form.stringFormData,
             method: 'POST'
         };
 
@@ -169,40 +152,59 @@
             }
         };
 
-        /* Callback that executes after the student information is returned */
-        var callback = function(err, res, html) {
-            if (err) {
-                throw new Error('Error in retrieving student informaton');
-            }
-
-            /* Library used to parse html  */
-            var $ = cheerio.load(res.body);
-
-            /* Finds if there is a match */
+        /* Finds if there is a match */
+        priv.isStudentFound = function($) {
             if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0) {
-                console.error("Student was not found!");
+                return false;
             }
             else {
-                /* Queries the student page for the table headers and table data */
-                $(priv.selectors.desc).each(function() {
-                    priv.desc.push($(this).text());
-                });
-
-                $(priv.selectors.data).each(function() {
-                    priv.data.push($(this).text());
-                });
-                // console.log(html);
-                priv.desc.shift();
-                priv.removeLinBr(priv.desc);
-                priv.removeLinBr(priv.data);
-                // console.log(priv.desc);
-                console.log(priv.data);
+                return true;
             }
+        };
+        
+        /* Queries the student page for the table headers and table data */
+        priv.queryPage = function($) {
+            $(priv.selectors.desc).each(function() {
+                priv.desc.push($(this).text());
+            });
 
+            $(priv.selectors.data).each(function() {
+                priv.data.push($(this).text());
+            });
+
+            priv.desc.shift();
+            priv.removeLinBr(priv.desc);
+            priv.removeLinBr(priv.data);
+            // console.log(priv.desc);
+            console.log(priv.data);
+        };
+        /* Finds the students info on the given html page */
+        priv.findStudent = function(htmlPage) {
+            /* Library used to parse html  */
+            var $ = cheerio.load(htmlPage);
+            
+            /* Checks if the student is found */
+            if (priv.isStudentFound($)) {
+                priv.queryPage($);
+            }
+            else {
+                console.error("Student was not found!");
+            }
         };
 
-        /* Sends the request  */
-        request(priv.reqOptions, callback);
+        /* Scrapes the students html page that is received from the server */
+        priv.scrape = function(htmlPage) {
+            priv.findStudent(htmlPage);
+        };
+
+        /* Callback that executes after the student information is returned */
+        var callback = function(err, res, html) {
+            if (err) throw new Error('Error in retrieving student informaton');
+            priv.scrape(res.body);
+        };
+
+        /* Sends the request */
+        request(priv.form.reqOptions, callback);
     };
 
     /* Allows you to pass in array of students for searching */
@@ -210,31 +212,29 @@
         if (Array.isArray(input)) {
             for (var student in input) {
                 console.log(input[student]);
-                getStudentInfo(input[student]);
-            };
+                getStudent(input[student]);
+            }
         }
         else {
-            getStudentInfo(input);
+            getStudent(input);
         }
     };
 
     /* Starts the psd-api */
-    psd([{
-        firstName: "Hozaifa",
-        lastName: "Abdalla"
-    }, {
-        firstName: "Yehya",
-        lastName: "Awad"
-    }, {
-        firstName: "Kenneth",
-        lastName: "Schnall"
-    }]);
+    // psd([{
+    //     firstName: "Hozaifa",
+    //     lastName: "Abdalla"
+    // }, {
+    //     firstName: "Yehya",
+    //     lastName: "Awad"
+    // }, {
+    //     firstName: "Kenneth",
+    //     lastName: "Schnall"
+    // }]);
 
-    psd("Nicholas Cecchetti");
+    // psd("Nicholas Cecchetti");
 
-    psd("kas6570@psu.edu");
-
-    psd("kas6570");
+    psd("Hozaifa Abdalla");
 
     app.listen(process.env.PORT, process.env.IP);
 }).call(this);
