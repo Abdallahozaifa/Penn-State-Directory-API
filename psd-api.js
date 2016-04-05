@@ -70,39 +70,38 @@
             },
 
             /* Validates the userID so that the format can either be xxxDDD or xxxDDDD, x-> letter D-> digit */
-            userID: function(str){
-                
+            userID: function(str) {
+
             },
 
             /* Determines if the option parameter is an object */
             isobjectValid: function() {
-                if (typeof options === "object") {
-                    /* Checks every value in the options object and Incase the string contains non-alphabet characters */
-                    for (var optKey in options) {
-                        /* Validates first and last name */
-                        if (optKey === "firstName" || optKey === "lastName") {
-                            if ((typeof options[optKey] != "string")) {
-                                throw new Error("Invalid Object format!");
-                            }
-                        }
-
-                        /* Validates the user id */
-                        else if (optKey === "userID") {
-
-                        }
-
-                        /* Validates the email */
-                        else if (optKey === "email") {
-                            if ((priv.validate.email(options[optKey]) === false)) {
-                                throw new Error("Invalid Object format!");
-                            }
-                        }
-                        else {
+                /* Checks every value in the options object and Incase the string contains non-alphabet characters */
+                for (var optKey in options) {
+                    /* Validates first and last name */
+                    if (optKey === "firstName" || optKey === "lastName") {
+                        if ((typeof options[optKey] != "string")) {
                             throw new Error("Invalid Object format!");
                         }
                     }
-                    return true;
+
+                    /* Validates the user id */
+                    else if (optKey === "userID") {
+
+                    }
+
+                    /* Validates the email */
+                    else if (optKey === "email") {
+                        if ((priv.validate.email(options[optKey]) === false)) {
+                            throw new Error("Invalid Object format!");
+                        }
+                    }
+                    else {
+                        throw new Error("Invalid Object format!");
+                    }
                 }
+                return true;
+
             }
         };
 
@@ -136,13 +135,15 @@
                     priv.fillStudentObj(input[0], "", "", "");
                 }
             }
-        }
+        };
 
         /* Initializes the students information passed in as options */
         priv.initStudent = function() {
-            /* Object is valid */
-            if (priv.validate.isobjectValid()) {
-                Object.assign(priv.Student, options);
+            /* Checks if the passed in is valid object */
+            if (typeof options === "object") {
+                if (priv.validate.isobjectValid()) {
+                    Object.assign(priv.Student, options);
+                }
             }
 
             /* Checks if the passed in parameter is a string */
@@ -186,7 +187,7 @@
         };
 
         /* Queries the student page for the table headers and table data */
-        priv.queryPage = function($) {
+        priv.getStudentInfo = function($) {
             $(priv.selectors.desc).each(function() {
                 priv.desc.push($(this).text());
             });
@@ -209,7 +210,7 @@
 
             /* Checks if the student is found */
             if (priv.isStudentFound($)) {
-                priv.queryPage($);
+                priv.getStudentInfo($);
             }
             else {
                 console.error("Student was not found!");
@@ -247,9 +248,7 @@
     /* Starts the psd-api below */
 
     /* SAMPLE OBJECT TESTCASES */
-    psd({
-        firstName: "Hozaifa"
-    }); /* PASSED */
+    psd({firstName: "Hozaifa"}); /* PASSED */
     // psd({lastName: "Abdalla"}); /* PASSED */
     // psd({email: "hea113"}); /* PASSED */
     // psd({userID: "hea113"}); /* PASSED */
