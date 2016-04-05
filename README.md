@@ -17,7 +17,7 @@ var student = {
 ~~+5. Enable the psd-api to search by email or userid <br>~~
 ~~+6. Validation for email and userid <br>~~
 
-+8. Enable psd-api to search by email or userid when objects are passed 
+~~+8. Enable psd-api to search by email or userid when objects are passed~~
 
 ~~+8. Enable the psd-api to pass in an array of students and have it return an array of student objects <br>~~
  
