@@ -185,9 +185,16 @@
                 return true;
             }
         };
-
-        /* Queries the student page for the table headers and table data */
-        priv.getStudentInfo = function($) {
+        
+        /* Formats the data that is received from the html page by removing first entry and line breaks */
+        priv.formatData = function(){
+            priv.desc.shift();
+            priv.removeLinBr(priv.desc);
+            priv.removeLinBr(priv.data);
+        };
+        
+        /* Queries the html page for the students information */
+        priv.queryPage = function($){
             $(priv.selectors.desc).each(function() {
                 priv.desc.push($(this).text());
             });
@@ -195,10 +202,12 @@
             $(priv.selectors.data).each(function() {
                 priv.data.push($(this).text());
             });
-
-            priv.desc.shift();
-            priv.removeLinBr(priv.desc);
-            priv.removeLinBr(priv.data);
+        };
+        
+        /* Queries the student page for the table headers and table data */
+        priv.getStudentInfo = function($) {
+            priv.queryPage($);
+            priv.formatData();
             // console.log(priv.desc);
             console.log(priv.data);
         };
