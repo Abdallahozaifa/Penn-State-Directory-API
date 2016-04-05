@@ -178,7 +178,7 @@
 
         /* Finds if there is a match */
         priv.isStudentFound = function($) {
-            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0) {
+            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0 || options ==="") {
                 return false;
             }
             else {
@@ -222,7 +222,8 @@
                 priv.getStudentInfo($);
             }
             else {
-                console.error("Student was not found!");
+                if(options !="")console.error("Student was not found!");
+                else console.error("Please enter a student!");
             }
         };
 
