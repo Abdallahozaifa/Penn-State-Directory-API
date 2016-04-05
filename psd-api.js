@@ -2,25 +2,25 @@
  *     PENN STATE DIRECTORY API         *
  ****************************************/
 (function() {
-
-    var express = require('express');
-    var app = express();
+    
+    /* Imports */
     var request = require('request');
     var querystring = require('querystring');
     var cheerio = require('cheerio');
-
+    
+    /* public object that will contain the public functions that are going to be exported */
+    var pub = {};
+    /* Private object that  will contain the private functions that will not be exported */
+    var priv = {};
     /**
      * psd-api namespace
      *
      */
     var getStudent = function(options) {
-        var pub = {};
-        var priv = {};
-
         priv.Student = {},
-        priv.form = {},
-        priv.desc = [],
-        priv.data = [];
+            priv.form = {},
+            priv.desc = [],
+            priv.data = [];
 
         /* Search configuration */
         priv.config = {
@@ -242,7 +242,7 @@
     };
 
     /* Allows you to pass in array of students for searching */
-    var psd = function(input) {
+    pub.get = function(input) {
         if (Array.isArray(input)) {
             for (var student in input) {
                 console.log(input[student]);
@@ -254,23 +254,14 @@
         }
     };
 
-    /* Starts the psd-api below */
-
-    /* SAMPLE OBJECT TESTCASES */
-    psd({
-        firstName: "Hozaifa"
-    }); /* PASSED */
-    // psd({lastName: "Abdalla"}); /* PASSED */
-    // psd({email: "hea113"}); /* PASSED */
-    // psd({userID: "hea113"}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: ""}); /* PASSED */
-    // psd({firstName: "", lastName: "Abdalla"}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: "Abdalla"}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "hea113"}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: ""}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "hea113", email: "hea113@psu.edu"}); /* PASSED */
-    // psd({firstName: "Hozaifa", lastName: "Abdalla" , userID: "", email: "hea113@psu.edu"}); /* PASSED */
-
-
-    app.listen(process.env.PORT, process.env.IP);
+    // EXPORT
+    if (typeof exports !== 'undefined') {
+        if (typeof module !== 'undefined' && module.exports) {
+            exports = module.exports = pub;
+        }
+        exports.psd = pub;
+    }
+    else {
+        root.psd = pub;
+    }
 }).call(this);
