@@ -8,11 +8,6 @@ Node.js
 $ npm install psd-api --save
 ```
 
-Bower
-```
-$ bower install psd-api --save
-```
-
 To install the latest development version:
 ```
 npm install git+https://github.com/Abdallahozaifa/Penn-State-Directory-API
@@ -44,36 +39,6 @@ Output:
 }
 
 ```
-
-###Bower
-
-HTML:
-```html
-<head>
-    <script src="bower_components/psd-api/psd-api.min.js"></script>
-</head>
-```
-JS:
-```javascript
-var callback = function(student) {
-  console.log(student);
-};
-
-// psd global is exposed for use
-psd.get("Hozaifa Abdalla", callback);
-```
-Output:
-```
-{ 
-  Name: 'HOZAIFA ELHAFIZ ABDALLA',
-  'E-mail': 'hea113@psu.edu',
-  'Mail ID': 'hea113@psu.edu',
-  Title: 'UNDERGRAD STUDENT',
-  Campus: 'PENN STATE ERIE, THE BEHREND COLLEGE',
-  Curriculum: 'SOFTWARE ENGINEERING' 
-}
-```
-
 ### API
 
 Obtaining students
@@ -131,7 +96,7 @@ for(var student in students){
 ```
 
 ##Example
-Checkout this [fiddle](https://jsfiddle.net/tnxbj112/5/).
+Checkout this [fiddle]().
 
 Authors
 -------
