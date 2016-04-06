@@ -99,7 +99,7 @@ Checkout this [fiddle]().
 
 Authors
 -------
-rmp-util was created by Hozaifa Abdalla and Kenneth Schnall
+psd-api was created by Hozaifa Abdalla and Kenneth Schnall
 
 For More Information
 --------------------
