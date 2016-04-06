@@ -1,5 +1,5 @@
 # Penn-State-Directory-API
-API that obtains student information from the Penn State Directory.
+A Penn State Directory scraper that pretends to be the PSD API
 
 ##Installation
 
@@ -7,6 +7,12 @@ Node.js
 ```
 $ npm install psd-api --save
 ```
+
+Bower
+```
+$ bower install psd-api --save
+```
+
 To install the latest development version:
 ```
 npm install git+https://github.com/Abdallahozaifa/Penn-State-Directory-API
@@ -70,13 +76,13 @@ Output:
 
 ### API
 
-Creating instances
+Obtaining students
 
-**psd.get(object,callback)**
+**psd.get(object, callback)**
 ```javascript
 var psd = require("psd-api");
 
-// Only search with first and last names
+// Search with first and last names
 psd.get({firstName: "Hozaifa", lastName: "Abdalla"}, callback);
 
 // Search with userID
@@ -89,7 +95,7 @@ psd.get({email: "hea113@psu.edu"}, callback);
 psd.get({firstName: "Hozaifa", lastName: "Abdalla", userID: "hea113", email: "hea113@psu.edu"}, callback);
 ```
 
-**psd.get(array,callback)**
+**psd.get(array, callback)**
 
 ```javascript
 var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
@@ -100,11 +106,11 @@ var callback = function(student){
 }
 
 // Search an array of students 
-psd.get(students,callback);
+psd.get(students, callback);
 
 ```
 
-**psd.get(string,callback)**
+**psd.get(string, callback)**
 ```javascript
 // Search with first and last names
 psd.get("Hozaifa Abdalla", callback);
