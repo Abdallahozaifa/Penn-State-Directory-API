@@ -262,8 +262,7 @@
     };
 
     /* EXPORTS the psd-api in node */
-    if (typeof module !== 'undefined' && module.exports) {
-        exports = module.exports = pub;
-    }
+       exports = module.exports = pub;
+
     
 }).call(this);
