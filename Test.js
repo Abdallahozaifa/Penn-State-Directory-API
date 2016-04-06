@@ -13,12 +13,12 @@ var psd = require("./psd-api.js");
 // psd.get({firstName: "Hozaifa", lastName: "Abdalla" , userID: ""}); /* PASSED */
 // psd.get({firstName: "Hozaifa", lastName: "Abdalla" , userID: "hea113", email: "hea113@psu.edu"}); /* PASSED */
 // psd.get({firstName: "Hozaifa", lastName: "Abdalla" , userID: "", email: "hea113@psu.edu"}); /* PASSED */
-// psd.get({email: "yehya@psu.edu"});
 // psd.get([{firstName: "Hozaifa", lastName:"Abdalla"},{email: "kenneth.schnall@psu.edu"},{userID: "kas6570"}]);
-// console.log(priv.Student["Name"]);
-// console.log(priv.Student["E-mail"]);
-// console.log(priv.Student["Mail ID"]);
-// console.log(priv.Student["Title"]);
-// console.log(priv.Student["Campus"]);
-// console.log(priv.Student["Curriculum"]);
-psd.get("Hozaifa Abdalla");
+// psd.get("Hozaifa Abdalla");
+
+var callback = function(student){
+    console.log(student);
+};
+var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
+
+psd.get(students,callback);

@@ -12,11 +12,12 @@
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
     var priv = {};
+    
     /**
      * psd-api namespace
      *
      */
-    var getStudent = function(options) {
+    var getStudent = function(options,callbackOne) {
         priv.Student = {},
             priv.form = {},
             priv.desc = [],
@@ -215,7 +216,6 @@
             priv.extractData($);
             priv.formatData();
             priv.initStudentData();
-            console.log(priv.Student);
         };
 
         /* Finds the students info on the given html page */
@@ -242,6 +242,7 @@
         var callback = function(err, res, html) {
             if (err) throw new Error('Error in retrieving student informaton');
             priv.scrape(res.body);
+            callbackOne(priv.Student);
         };
 
         /* Sends the request */
@@ -249,14 +250,19 @@
     };
 
     /* Allows you to pass in array of students for searching */
-    pub.get = function(input) {
+    pub.get = function(input,callbackOne) {
+        /* Validates if the number of parameter passed in is 2 and the second parameter is a callback */
+        if(arguments.length != 2 || typeof callbackOne != "function"){
+            console.error("Please provide the correct number of parameters and a callback function!");
+            return;
+        }
         if (Array.isArray(input)) {
             for (var student in input) {
-                getStudent(input[student]);
+                getStudent(input[student],callbackOne);
             }
         }
         else {
-            getStudent(input);
+            getStudent(input,callbackOne);
         }
     };
 
