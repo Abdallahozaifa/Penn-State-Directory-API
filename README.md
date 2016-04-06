@@ -133,7 +133,20 @@ for(var student in students){
 ##Example
 Checkout this [fiddle](https://jsfiddle.net/tnxbj112/5/).
 
-##Author
+Authors
+-------
+rmp-util was created by Hozaifa Abdalla and Kenneth Schnall
+
+For More Information
+--------------------
+
++ Documentation is available at [Use psd-api](http://usejsdoc.org).
++ Contribute to the docs at [psd-api](https://github.com/Abdallahozaifa/Penn-State-Directory-API).
+
+License
+-------
+
+psd-api is copyright (c) 2016 Hozaifa Abdalla, Kenneth Schnall. <br>psd-api is free software, licensed under the MIT License, See the file `LICENSE.md` in this distribution for more details.
 
 
 
