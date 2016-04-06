@@ -74,6 +74,13 @@ var callback = function(student){
 psd.get(students, callback);
 
 ```
+or
+```javascript
+// Search multiple students using iteration
+for(var student in students){
+    psd.get(student,callback);
+}
+```
 
 **psd.get(string, callback)**
 ```javascript
@@ -85,14 +92,6 @@ psd.get("hea113", callback);
 
 // Search with email
 psd.get("hea113@psu.edu", callback);
-```
-
-or
-```javascript
-// Search multiple students using iteration
-for(var student in students){
-    psd.get(student,callback);
-}
 ```
 
 ##Example
