@@ -23,11 +23,6 @@
             priv.desc = [],
             priv.data = [];
 
-        /* Search configuration */
-        priv.config = {
-            year: "" // student year --> undergraduate
-        };
-
         /* Selectors used for searching HTML */
         priv.selectors = {
             matches: "b", // the number of matches for each student
@@ -83,7 +78,8 @@
 
                     /* Validates the user id */
                     else if (optKey === "userID") {
-
+                        if(priv.validate.userID(options["userID"])) return true;
+                        else return false;
                     }
 
                     /* Validates the email */
@@ -97,7 +93,6 @@
                     }
                 }
                 return true;
-
             }
         };
 
@@ -175,7 +170,7 @@
 
         /* Finds if there is a match */
         priv.isStudentFound = function($) {
-            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0 || options ==="") {
+            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
             }
             else {
@@ -266,14 +261,9 @@
         }
     };
 
-    // EXPORT
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = pub;
-        }
-        exports.psd = pub;
+    /* EXPORTS the psd-api in node */
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = pub;
     }
-    else {
-        root.psd = pub;
-    }
+    
 }).call(this);

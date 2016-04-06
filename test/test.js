@@ -1,6 +1,5 @@
-var psd = require("./psd-api.js");
-
-/* Starts the psd-api below */
+/* Starts the psd-api */
+var psd = require("../src/psd-api.js");
 
 /* SAMPLE OBJECT TESTCASES */
 // psd.get({lastName: "Abdalla"}); /* PASSED */
@@ -16,9 +15,8 @@ var psd = require("./psd-api.js");
 // psd.get([{firstName: "Hozaifa", lastName:"Abdalla"},{email: "kenneth.schnall@psu.edu"},{userID: "kas6570"}]);
 // psd.get("Hozaifa Abdalla");
 
+var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
 var callback = function(student){
     console.log(student);
 };
-var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
-
-psd.get(students,callback);
+psd.get({userID:"hea113"},callback);
