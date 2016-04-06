@@ -1,5 +1,5 @@
 # Penn-State-Directory-API
-A Penn State Directory scraper that pretends to be the PSD API
+A Penn State Directory scraper that pretends to be the psd-api
 
 ##Installation
 
