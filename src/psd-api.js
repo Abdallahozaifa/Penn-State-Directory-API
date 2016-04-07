@@ -2,32 +2,34 @@
  *     PENN STATE DIRECTORY API         *
  ****************************************/
 (function() {
-    
+
     /* Imports */
     var request = require('request');
     var querystring = require('querystring');
     var cheerio = require('cheerio');
-    
+
     /* public object that will contain the public functions that are going to be exported */
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
     var priv = {};
-    
+
     /**
      * psd-api namespace
      *
      */
-    var getStudent = function(options,callbackOne) {
-        priv.Student = {},
-            priv.form = {},
-            priv.desc = [],
-            priv.data = [];
+    var getStudent = function(options, callbackOne) {
+        priv.Student = {}, // student 
+            priv.form = {}, // form
+            priv.directoryPage = {}, // directory page that is returned from the server
+            priv.directoryPage.desc = [], // description elements from the directory page
+            priv.directoryPage.data = []; // data elements from the directory page
 
         /* Selectors used for searching HTML */
         priv.selectors = {
-            matches: "b", // the number of matches for each student
-            desc: "th", // the descriptions of the student such as name, email, etc
-            data: "td" // the data for the descriptions
+            TABLES: "body > div > form > table", // the selector for all the tables on the page for all the students
+            MATCHES: "b", // the number of MATCHES for each student
+            DESC: "th", // the descriptions of the student such as name, email, etc
+            DATA: "td" // the data for the descriptions
         };
 
         /* Generates new query object for the form */
@@ -78,7 +80,7 @@
 
                     /* Validates the user id */
                     else if (optKey === "userID") {
-                        if(priv.validate.userID(options["userID"])) return true;
+                        if (priv.validate.userID(options["userID"])) return true;
                         else return false;
                     }
 
@@ -163,14 +165,19 @@
         /* Removes all line breaks and colons in the data retrieved */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
-                arr[str] = arr[str].replace(/\n+/g, '');
+                arr[str] = arr[str].trim();
                 arr[str] = arr[str].replace(/:/g, '');
+
+                /* Seperates the emails with commas */
+                if (priv.validate.email(arr[str])) {
+                    arr[str] = arr[str].replace(/\n+/g, ', ');
+                }
             }
         };
 
         /* Finds if there is a match */
         priv.isStudentFound = function($) {
-            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0 || options === "") {
+            if ($(priv.selectors.MATCHES).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
             }
             else {
@@ -180,32 +187,41 @@
 
         /* Formats the data that is received from the html page by removing first entry and line breaks */
         priv.formatData = function() {
-            priv.desc.shift();
-            priv.removeLinBr(priv.desc);
-            priv.removeLinBr(priv.data);
+            priv.directoryPage.desc.shift();
+            priv.removeLinBr(priv.directoryPage.desc);
+            priv.removeLinBr(priv.directoryPage.data);
         };
 
         /* Queries the html page for the students information */
         priv.extractData = function($) {
-            $(priv.selectors.desc).each(function() {
-                priv.desc.push($(this).text());
+            priv.directoryPage.data = [], priv.directoryPage.desc = []; // resets the student data and description array
+            priv.forms = [];
+            var tables = "body > div > form > table";
+            priv.totalStuds = [];
+            $(tables).each(function(){
+               console.log($(this).text());
+            });
+            console.log(priv.totalStuds[0]);
+            
+            $(priv.selectors.DESC).each(function() {
+                priv.directoryPage.desc.push($(this).text());
             });
 
-            $(priv.selectors.data).each(function() {
-                priv.data.push($(this).text());
+            $(priv.selectors.DATA).each(function() {
+                priv.directoryPage.data.push($(this).text());
             });
-            
-        }; 
-        
+
+        };
+
         /* Initializes the Student object with the correct properties and values */
-        priv.initStudentData = function(){
+        priv.initStudentData = function() {
             priv.Student = {};
-            for(var studKey in priv.data){
-                var studProp = priv.desc[studKey];
-                priv.Student[studProp] = priv.data[studKey];
+            for (var studKey in priv.directoryPage.data) {
+                var studProp = priv.directoryPage.desc[studKey];
+                priv.Student[studProp] = priv.directoryPage.data[studKey];
             }
         };
-        
+
         /* Queries the student page for the table headers and table data */
         priv.getStudentInfo = function($) {
             priv.extractData($);
@@ -223,7 +239,7 @@
                 priv.getStudentInfo($);
             }
             else {
-                if(options !="")console.error("Student was not found!");
+                if (options != "") console.error("Student was not found!");
                 else console.error("Please enter a student!");
             }
         };
@@ -245,24 +261,24 @@
     };
 
     /* Allows you to pass in array of students for searching */
-    pub.get = function(input,callbackOne) {
+    pub.get = function(input, callbackOne) {
         /* Validates if the number of parameter passed in is 2 and the second parameter is a callback */
-        if(arguments.length != 2 || typeof callbackOne != "function"){
+        if (arguments.length != 2 || typeof callbackOne != "function") {
             console.error("Please provide the correct number of parameters and a callback function!");
             return;
         }
+
+        /* If an array is passed in then loops through and gets each student */
         if (Array.isArray(input)) {
             for (var student in input) {
-                getStudent(input[student],callbackOne);
+                getStudent(input[student], callbackOne);
             }
         }
         else {
-            getStudent(input,callbackOne);
+            getStudent(input, callbackOne);
         }
     };
-
     /* EXPORTS the psd-api in node */
-       exports = module.exports = pub;
+    module.exports = pub;
 
-    
 }).call(this);

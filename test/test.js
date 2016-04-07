@@ -15,8 +15,11 @@ var psd = require("../src/psd-api.js");
 // psd.get([{firstName: "Hozaifa", lastName:"Abdalla"},{email: "kenneth.schnall@psu.edu"},{userID: "kas6570"}]);
 // psd.get("Hozaifa Abdalla");
 
-var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
+var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"},{firstName: "Manan", lastName: "Patel"}
+,{firstName: "Yehya", lastName: "Awad"}];
+
 var callback = function(student){
-    console.log(student);
+    // console.log(student);
 };
-psd.get({userID:"cms6227"},callback);
+// psd.get(students, callback);
+psd.get("Manan Patel",callback);
