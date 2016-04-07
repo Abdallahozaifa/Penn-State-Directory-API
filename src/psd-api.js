@@ -146,7 +146,7 @@
         /* Form object that will contain the form data that will be sent in the post request */
         priv.form.data = priv.newQuery(priv.Student.firstName, priv.Student.lastName, priv.Student.userID, priv.Student.email);
         priv.form.stringFormData = querystring.stringify(priv.form.data); /* Contains the stringified data */
-        priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent over */
+        priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent in post request */
         priv.form.dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi'; /* Penn State Directory link for scraping */
 
         /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
