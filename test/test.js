@@ -21,4 +21,4 @@ var callback = function(student){
     console.log(student);
 };
 
-psd.get({firstName: "Yehya", lastName: "Awad"}, callback);
+psd.get(students, callback);

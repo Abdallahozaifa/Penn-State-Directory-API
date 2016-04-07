@@ -165,10 +165,9 @@
             for (var str in arr) {
                 arr[str] = arr[str].trim();
                 arr[str] = arr[str].replace(/:/g, '');
-                
+
                 /* Seperates the emails with commas */
-                if(priv.validate.email(arr[str])){
-                    console.log("email detected!");
+                if (priv.validate.email(arr[str])) {
                     arr[str] = arr[str].replace(/\n+/g, ', ');
                 }
             }
@@ -193,6 +192,7 @@
 
         /* Queries the html page for the students information */
         priv.extractData = function($) {
+            priv.data = [], priv.desc = []; // reset
             $(priv.selectors.DESC).each(function() {
                 priv.desc.push($(this).text());
             });
@@ -257,7 +257,7 @@
             console.error("Please provide the correct number of parameters and a callback function!");
             return;
         }
-        
+
         /* If an array is passed in then loops through and gets each student */
         if (Array.isArray(input)) {
             for (var student in input) {
@@ -270,5 +270,5 @@
     };
     /* EXPORTS the psd-api in node */
     module.exports = pub;
-    
+
 }).call(this);
