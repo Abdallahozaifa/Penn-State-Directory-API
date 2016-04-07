@@ -177,22 +177,22 @@
         priv.isStudentFound = function($) {
             if ($(priv.selectors.MATCHES).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         };
 
-        /* Formats the data that is received from the html page by removing first entry and line breaks */
+        /* Formats the data that is received from the HTML page by removing first entry and line breaks */
         priv.formatData = function() {
             priv.desc.shift();
             priv.removeLinBr(priv.desc);
             priv.removeLinBr(priv.data);
         };
 
-        /* Queries the html page for the students information */
+        /* Queries the HTML page for the students information */
         priv.extractData = function($) {
             priv.data = [], priv.desc = []; // reset
+
             $(priv.selectors.DESC).each(function() {
                 priv.desc.push($(this).text());
             });
@@ -200,12 +200,12 @@
             $(priv.selectors.DATA).each(function() {
                 priv.data.push($(this).text());
             });
-
         };
 
         /* Initializes the Student object with the correct properties and values */
         priv.initStudentData = function() {
             priv.Student = {};
+
             for (var studKey in priv.data) {
                 var studProp = priv.desc[studKey];
                 priv.Student[studProp] = priv.data[studKey];
@@ -219,9 +219,9 @@
             priv.initStudentData();
         };
 
-        /* Finds the students info on the given html page */
+        /* Finds the students info on the given HTML page */
         priv.findStudent = function(htmlPage) {
-            /* Library used to parse html  */
+            /* Library used to parse HTML  */
             var $ = cheerio.load(htmlPage);
 
             /* Checks if the student is found */
@@ -234,7 +234,7 @@
             }
         };
 
-        /* Scrapes the students html page that is received from the server */
+        /* Scrapes the students HTML page that is received from the server */
         priv.scrape = function(htmlPage) {
             priv.findStudent(htmlPage);
         };
