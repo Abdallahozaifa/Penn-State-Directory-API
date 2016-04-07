@@ -25,9 +25,9 @@
 
         /* Selectors used for searching HTML */
         priv.selectors = {
-            matches: "b", // the number of matches for each student
-            desc: "th", // the descriptions of the student such as name, email, etc
-            data: "td" // the data for the descriptions
+            MATCHES: "b", // the number of MATCHES for each student
+            DESC: "th", // the descriptions of the student such as name, email, etc
+            DATA: "td" // the data for the descriptions
         };
 
         /* Generates new query object for the form */
@@ -176,7 +176,7 @@
 
         /* Finds if there is a match */
         priv.isStudentFound = function($) {
-            if ($(priv.selectors.matches).text().indexOf("0 matches", 0) == 0 || options === "") {
+            if ($(priv.selectors.MATCHES).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
             }
             else {
@@ -193,11 +193,11 @@
 
         /* Queries the html page for the students information */
         priv.extractData = function($) {
-            $(priv.selectors.desc).each(function() {
+            $(priv.selectors.DESC).each(function() {
                 priv.desc.push($(this).text());
             });
 
-            $(priv.selectors.data).each(function() {
+            $(priv.selectors.DATA).each(function() {
                 priv.data.push($(this).text());
             });
 
