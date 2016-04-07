@@ -8,7 +8,7 @@
     var querystring = require('querystring');
     var cheerio = require('cheerio');
 
-    /* public object that will contain the public functions that are going to be exported */
+    /* Public object that will contain the public functions that are going to be exported */
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
     var priv = {};
@@ -19,7 +19,7 @@
      */
     var getStudent = function(options, callbackOne) {
         priv.Student = {}, // student 
-            priv.form = {}, // form 
+            priv.form = {}, // form
             priv.desc = [], // description elements from the directory page
             priv.data = []; // data elements from the directory page
 
@@ -35,8 +35,8 @@
             return {
                 'cn': firstName,
                 'sn': lastName,
-                'uid': userID, // name=uid in search page instead of id=userID
-                'mail': email // name=mail in search page instead of id=email
+                'uid': userID, // name=uid attribute in search page
+                'mail': email // name=mail attribute in search page
             };
         };
 
@@ -128,7 +128,7 @@
             }
         };
 
-        /* Initializes the students information passed in as options */
+        /* Initializes the student information passed in as options */
         priv.initStudent = function() {
             /* Checks if the passed in is valid object */
             if (typeof options === "object") {
