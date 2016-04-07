@@ -1,3 +1,16 @@
+// Should we change variables/functions named "student" to "person"?
+    // This API can be used to search Penn State professors and faculty/staff as well
+
+// I added some JSDoc comments but I was not sure about some of the variable types or the descriptions of the methods
+    // Please search for "???" and either edit them to how you like or let me know how they are supposed to look
+
+// I left your normal comments above each JSDoc I added, so you may want to remove them
+    // I just copied the comments originally above each function into the description or each JSDoc I added
+        // I did describe the parameters of those functions to my best knowledge though
+    // I left them in case you wanted to remove the JSDocs
+
+
+
 /****************************************
  *     PENN STATE DIRECTORY API         *
  ****************************************/
@@ -30,6 +43,14 @@
         };
 
         /* Generates new query object for the form */
+        /**
+        * Generates new query object for the form.
+        * @function
+        * @param {string} firstName - The first name of the person.
+        * @param {string} lastName - The last name of the person.
+        * @param {string} userID - The user id of the person.
+        * @param {string} email - The email of the person.
+        */
         priv.newQuery = function(firstName, lastName, userID, email) {
             return {
                 'cn': firstName,
@@ -96,6 +117,14 @@
         };
 
         /* Fills the student info object  */
+        /**
+        * Fills the student info object.
+        * @function
+        * @param {string} firstName - The first name of the person.
+        * @param {string} lastName - The last name of the person.
+        * @param {string} userID - The user id of the person.
+        * @param {string} email - The email of the person.
+        */
         priv.fillStudentObj = function(firstName, lastName, userID, email) {
             priv.Student.firstName = firstName;
             priv.Student.lastName = lastName;
@@ -104,6 +133,10 @@
         };
 
         /* Initializes the Student object depending on the passed in string */
+        /**
+        * Initializes the Student object depending on the passed in string.
+        * @function
+        */
         priv.initStrStudent = function() {
             /* Checks if passed in parameter is an email */
             if (priv.validate.email(options)) {
@@ -128,6 +161,10 @@
         };
 
         /* Initializes the student information passed in as options */
+        /**
+        * Initializes the student information passed in as options.
+        * @function
+        */
         priv.initStudent = function() {
             /* Checks if the passed in is valid object */
             if (typeof options === "object") {
@@ -160,6 +197,11 @@
         };
 
         /* Removes all line breaks and colons in the data retrieved */
+        /**
+        * Removes all line breaks and colons in the data retrieved.
+        * @function
+        * @param {array} arr - The array of strings that make up the response from the POST request???.
+        */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
                 arr[str] = arr[str].trim();
@@ -173,6 +215,11 @@
         };
 
         /* Finds if there is a match */
+        /**
+        * Finds if there is a match.
+        * @function
+        * @param {$} $ - ???
+        */
         priv.isStudentFound = function($) {
             if ($(priv.selectors.MATCHES).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
@@ -182,6 +229,10 @@
         };
 
         /* Formats the data that is received from the HTML page by removing first entry and line breaks */
+        /**
+        * Formats the data that is received from the HTML page by removing first entry and line breaks.
+        * @function
+        */
         priv.formatData = function() {
             priv.desc.shift();
             priv.removeLinBr(priv.desc);
@@ -189,6 +240,11 @@
         };
 
         /* Queries the HTML page for the students information */
+        /**
+        * Queries the HTML page for the students information.
+        * @function
+        * @param {$} $ - ???
+        */
         priv.extractData = function($) {
             priv.data = [], priv.desc = []; // reset
 
@@ -202,6 +258,10 @@
         };
 
         /* Initializes the Student object with the correct properties and values */
+        /**
+        * Initializes the Student object with the correct properties and values.
+        * @function
+        */
         priv.initStudentData = function() {
             priv.Student = {};
 
@@ -212,6 +272,11 @@
         };
 
         /* Queries the student page for the table headers and table data */
+        /**
+        * Queries the student page for the table headers and table data.
+        * @function
+        * @param {$} $ - ???
+        */
         priv.getStudentInfo = function($) {
             priv.extractData($);
             priv.formatData();
@@ -219,6 +284,11 @@
         };
 
         /* Finds the students info on the given HTML page */
+        /**
+        * Finds the students info on the given HTML page.
+        * @function
+        * @param {string} htmlPage - String representing the HTML recieved from the POST request???.
+        */
         priv.findStudent = function(htmlPage) {
             /* Library used to parse HTML  */
             var $ = cheerio.load(htmlPage);
@@ -234,11 +304,23 @@
         };
 
         /* Scrapes the students HTML page that is received from the server */
+        /**
+        * Scrapes the students HTML page that is received from the server.
+        * @function
+        * @param {string} htmlPage - String representing the HTML recieved from the POST request???.
+        */
         priv.scrape = function(htmlPage) {
             priv.findStudent(htmlPage);
         };
 
         /* Callback that executes after the student information is returned */
+        /**
+        * Callback that executes after the student information is returned.
+        * @function
+        * @param {boolean???} err - Whether or not an error ocurred???.
+        * @param {string} res - String representing the HTML recieved from the POST request???.
+        * @param {???} html - ???.
+        */
         var callback = function(err, res, html) {
             if (err) throw new Error('Error in retrieving student informaton');
             priv.scrape(res.body);
@@ -250,6 +332,12 @@
     };
 
     /* Allows you to pass in array of students for searching */
+    /**
+    * Allows you to pass in array of students for searching.
+    * @function
+    * @param {String or Object???} input - Query to search for in the directory.
+    * @param {???} callbackOne - Callback function.
+    */
     pub.get = function(input, callbackOne) {
         /* Validates if the number of parameter passed in is 2 and the second parameter is a callback */
         if (arguments.length != 2 || typeof callbackOne != "function") {
