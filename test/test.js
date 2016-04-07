@@ -19,4 +19,4 @@ var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth
 var callback = function(student){
     console.log(student);
 };
-psd.get({userID:"hea113"},callback);
+psd.get({userID:"cms6227"},callback);
