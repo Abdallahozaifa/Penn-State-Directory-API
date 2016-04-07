@@ -2,7 +2,6 @@
  *     PENN STATE DIRECTORY API         *
  ****************************************/
 (function() {
-
     /* Imports */
     var request = require('request');
     var querystring = require('querystring');
@@ -268,7 +267,7 @@
             getStudent(input, callbackOne);
         }
     };
+
     /* EXPORTS the psd-api in node */
     module.exports = pub;
-
 }).call(this);
