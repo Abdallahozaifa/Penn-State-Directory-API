@@ -16,7 +16,9 @@ var psd = require("../src/psd-api.js");
 // psd.get("Hozaifa Abdalla");
 
 var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
+
 var callback = function(student){
     console.log(student);
 };
-psd.get({userID:"hea113"},callback);
+
+psd.get({firstName: "Yehya", lastName: "Awad"}, callback);

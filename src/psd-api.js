@@ -2,26 +2,26 @@
  *     PENN STATE DIRECTORY API         *
  ****************************************/
 (function() {
-    
+
     /* Imports */
     var request = require('request');
     var querystring = require('querystring');
     var cheerio = require('cheerio');
-    
+
     /* public object that will contain the public functions that are going to be exported */
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
     var priv = {};
-    
+
     /**
      * psd-api namespace
      *
      */
-    var getStudent = function(options,callbackOne) {
-        priv.Student = {},
-            priv.form = {},
-            priv.desc = [],
-            priv.data = [];
+    var getStudent = function(options, callbackOne) {
+        priv.Student = {}, // student 
+            priv.form = {}, // form 
+            priv.desc = [], // description elements from the directory page
+            priv.data = []; // data elements from the directory page
 
         /* Selectors used for searching HTML */
         priv.selectors = {
@@ -78,7 +78,7 @@
 
                     /* Validates the user id */
                     else if (optKey === "userID") {
-                        if(priv.validate.userID(options["userID"])) return true;
+                        if (priv.validate.userID(options["userID"])) return true;
                         else return false;
                     }
 
@@ -163,8 +163,14 @@
         /* Removes all line breaks and colons in the data retrieved */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
-                arr[str] = arr[str].replace(/\n+/g, '');
+                arr[str] = arr[str].trim();
                 arr[str] = arr[str].replace(/:/g, '');
+                
+                /* Seperates the emails with commas */
+                if(priv.validate.email(arr[str])){
+                    console.log("email detected!");
+                    arr[str] = arr[str].replace(/\n+/g, ', ');
+                }
             }
         };
 
@@ -194,18 +200,18 @@
             $(priv.selectors.data).each(function() {
                 priv.data.push($(this).text());
             });
-            
-        }; 
-        
+
+        };
+
         /* Initializes the Student object with the correct properties and values */
-        priv.initStudentData = function(){
+        priv.initStudentData = function() {
             priv.Student = {};
-            for(var studKey in priv.data){
+            for (var studKey in priv.data) {
                 var studProp = priv.desc[studKey];
                 priv.Student[studProp] = priv.data[studKey];
             }
         };
-        
+
         /* Queries the student page for the table headers and table data */
         priv.getStudentInfo = function($) {
             priv.extractData($);
@@ -223,7 +229,7 @@
                 priv.getStudentInfo($);
             }
             else {
-                if(options !="")console.error("Student was not found!");
+                if (options != "") console.error("Student was not found!");
                 else console.error("Please enter a student!");
             }
         };
@@ -245,24 +251,24 @@
     };
 
     /* Allows you to pass in array of students for searching */
-    pub.get = function(input,callbackOne) {
+    pub.get = function(input, callbackOne) {
         /* Validates if the number of parameter passed in is 2 and the second parameter is a callback */
-        if(arguments.length != 2 || typeof callbackOne != "function"){
+        if (arguments.length != 2 || typeof callbackOne != "function") {
             console.error("Please provide the correct number of parameters and a callback function!");
             return;
         }
+        
+        /* If an array is passed in then loops through and gets each student */
         if (Array.isArray(input)) {
             for (var student in input) {
-                getStudent(input[student],callbackOne);
+                getStudent(input[student], callbackOne);
             }
         }
         else {
-            getStudent(input,callbackOne);
+            getStudent(input, callbackOne);
         }
     };
-
     /* EXPORTS the psd-api in node */
-       exports = module.exports = pub;
-
+    module.exports = pub;
     
 }).call(this);
