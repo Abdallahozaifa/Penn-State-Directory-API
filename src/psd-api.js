@@ -237,15 +237,7 @@
                 priv.studs.push(table);
                 // console.log(table);
             });
-            priv.removeLinBr(priv.studs);
-            console.log(priv.studs);
-            // for(var entry in priv.totalStuds){
-            //     priv.totalStuds[entry] = priv.totalStuds[entry].replace(/\n+/g, ',');
-            // }
-            // priv.studs = priv.totalStuds[0].split(",");
-            // console.log(priv.totalStuds);
-            // console.log(tables.length); 
-            
+             
             $(priv.selectors.DESC).each(function() {
                 priv.directoryPage.desc.push($(this).text());
             });
