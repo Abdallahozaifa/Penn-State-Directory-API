@@ -1,14 +1,13 @@
-/****************************************
+ /****************************************
  *     PENN STATE DIRECTORY API         *
  ****************************************/
 (function() {
-
     /* Imports */
     var request = require('request');
     var querystring = require('querystring');
     var cheerio = require('cheerio');
 
-    /* public object that will contain the public functions that are going to be exported */
+    /* Public object that will contain the public functions that are going to be exported */
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
     var priv = {};
@@ -24,6 +23,7 @@
             priv.directoryPage.desc = [], // description elements from the directory page
             priv.directoryPage.data = []; // data elements from the directory page
 
+
         /* Selectors used for searching HTML */
         priv.selectors = {
             TABLES: "body > div > form > table", // the selector for all the tables on the page for all the students
@@ -32,13 +32,20 @@
             DATA: "td" // the data for the descriptions
         };
 
-        /* Generates new query object for the form */
+        /**
+        * Generates new query object for the form.
+        * @function
+        * @param {string} firstName - The first name of the person.
+        * @param {string} lastName - The last name of the person.
+        * @param {string} userID - The user id of the person.
+        * @param {string} email - The email of the person.
+        */
         priv.newQuery = function(firstName, lastName, userID, email) {
             return {
                 'cn': firstName,
                 'sn': lastName,
-                'uid': userID, // name=uid in search page instead of id=userID
-                'mail': email // name=mail in search page instead of id=email
+                'uid': userID, // name=uid attribute in search page
+                'mail': email // name=mail attribute in search page
             };
         };
 
@@ -98,7 +105,14 @@
             }
         };
 
-        /* Fills the student info object  */
+        /**
+        * Fills the student info object.
+        * @function
+        * @param {string} firstName - The first name of the person.
+        * @param {string} lastName - The last name of the person.
+        * @param {string} userID - The user id of the person.
+        * @param {string} email - The email of the person.
+        */
         priv.fillStudentObj = function(firstName, lastName, userID, email) {
             priv.Student.firstName = firstName;
             priv.Student.lastName = lastName;
@@ -106,7 +120,10 @@
             priv.Student.email = email;
         };
 
-        /* Initializes the Student object depending on the passed in string */
+        /**
+        * @function
+        * Initializes the Student object depending on the passed in string. 
+        */
         priv.initStrStudent = function() {
             /* Checks if passed in parameter is an email */
             if (priv.validate.email(options)) {
@@ -130,7 +147,10 @@
             }
         };
 
-        /* Initializes the students information passed in as options */
+        /**
+        * @function 
+        * Initializes the student information passed in as options.
+        */
         priv.initStudent = function() {
             /* Checks if the passed in is valid object */
             if (typeof options === "object") {
@@ -148,7 +168,7 @@
         /* Form object that will contain the form data that will be sent in the post request */
         priv.form.data = priv.newQuery(priv.Student.firstName, priv.Student.lastName, priv.Student.userID, priv.Student.email);
         priv.form.stringFormData = querystring.stringify(priv.form.data); /* Contains the stringified data */
-        priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent over */
+        priv.form.contentLength = priv.form.stringFormData.length; /* Contains the size of the data that is sent in post request */
         priv.form.dirLink = 'http://www.work.psu.edu/cgi-bin/ldap/ldap_query.cgi'; /* Penn State Directory link for scraping */
 
         /* Request options that contain the appropriate request headers, url, body, and method for sending the post request */
@@ -162,7 +182,11 @@
             method: 'POST'
         };
 
-        /* Removes all line breaks and colons in the data retrieved */
+        /**
+        * Removes all line breaks and colons in the data retrieved.
+        * @function
+        * @param {array} arr - The array of strings that make up the response from the POST request???.
+        */
         priv.removeLinBr = function(arr) {
             for (var str in arr) {
                 arr[str] = arr[str].trim();
@@ -175,33 +199,52 @@
             }
         };
 
-        /* Finds if there is a match */
+        /**
+        * Finds if there is a match.
+        * @function
+        * @param {$} $ - Cheerio object that is used to query the given html
+        */
         priv.isStudentFound = function($) {
             if ($(priv.selectors.MATCHES).text().indexOf("0 matches", 0) == 0 || options === "") {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         };
 
-        /* Formats the data that is received from the html page by removing first entry and line breaks */
+        /**
+        * Formats the data that is received from the HTML page by removing first entry and line breaks.
+        * @function
+        */
         priv.formatData = function() {
             priv.directoryPage.desc.shift();
             priv.removeLinBr(priv.directoryPage.desc);
             priv.removeLinBr(priv.directoryPage.data);
         };
 
-        /* Queries the html page for the students information */
+        /**
+        * Queries the HTML page for the students information.
+        * @function
+        * @param {$} $ - Cheerio object that is used to query the given html
+        */
         priv.extractData = function($) {
             priv.directoryPage.data = [], priv.directoryPage.desc = []; // resets the student data and description array
             priv.forms = [];
-            var tables = "body > div > form > table";
-            priv.totalStuds = [];
-            $(tables).each(function(){
-               console.log($(this).text());
+            var tables = $(priv.selectors.TABLES);
+            priv.studs = [];
+            tables.each(function(key){
+                var table = $(this).text();
+                priv.studs.push(table);
+                // console.log(table);
             });
-            console.log(priv.totalStuds[0]);
+            priv.removeLinBr(priv.studs);
+            console.log(priv.studs);
+            // for(var entry in priv.totalStuds){
+            //     priv.totalStuds[entry] = priv.totalStuds[entry].replace(/\n+/g, ',');
+            // }
+            // priv.studs = priv.totalStuds[0].split(",");
+            // console.log(priv.totalStuds);
+            // console.log(tables.length); 
             
             $(priv.selectors.DESC).each(function() {
                 priv.directoryPage.desc.push($(this).text());
@@ -210,10 +253,12 @@
             $(priv.selectors.DATA).each(function() {
                 priv.directoryPage.data.push($(this).text());
             });
-
         };
 
-        /* Initializes the Student object with the correct properties and values */
+        /**
+        * Initializes the Student object with the correct properties and values.
+        * @function
+        */
         priv.initStudentData = function() {
             priv.Student = {};
             for (var studKey in priv.directoryPage.data) {
@@ -221,17 +266,25 @@
                 priv.Student[studProp] = priv.directoryPage.data[studKey];
             }
         };
-
-        /* Queries the student page for the table headers and table data */
+        
+        /**
+        * Queries the student page for the table headers and table data.
+        * @function
+        * @param {$} $ - Cheerio object that is used to query the given html
+        */
         priv.getStudentInfo = function($) {
             priv.extractData($);
             priv.formatData();
             priv.initStudentData();
         };
 
-        /* Finds the students info on the given html page */
+        /**
+        * Finds the students info on the given HTML page.
+        * @function
+        * @param {string} htmlPage - String representing the HTML recieved from the POST request???.
+        */
         priv.findStudent = function(htmlPage) {
-            /* Library used to parse html  */
+            /* Library used to parse HTML  */
             var $ = cheerio.load(htmlPage);
 
             /* Checks if the student is found */
@@ -244,12 +297,22 @@
             }
         };
 
-        /* Scrapes the students html page that is received from the server */
+        /**
+        * Scrapes the students HTML page that is received from the server.
+        * @function
+        * @param {string} htmlPage - String representing the HTML recieved from the POST request???.
+        */
         priv.scrape = function(htmlPage) {
             priv.findStudent(htmlPage);
         };
 
-        /* Callback that executes after the student information is returned */
+        /**
+        * Callback that executes after the student information is returned.
+        * @function
+        * @param {boolean} err - Whether or not an error ocurred.
+        * @param {string} res - The respone object.
+        * @param {object} html - the body of the request.
+        */
         var callback = function(err, res, html) {
             if (err) throw new Error('Error in retrieving student informaton');
             priv.scrape(res.body);
@@ -260,7 +323,12 @@
         request(priv.form.reqOptions, callback);
     };
 
-    /* Allows you to pass in array of students for searching */
+    /**
+    * Allows you to pass in array of students for searching.
+    * @function
+    * @param {String or Object} input - input that is queried in the penn state directory.
+    * @param {function} callbackOne - First callback function.
+    */
     pub.get = function(input, callbackOne) {
         /* Validates if the number of parameter passed in is 2 and the second parameter is a callback */
         if (arguments.length != 2 || typeof callbackOne != "function") {
@@ -278,7 +346,7 @@
             getStudent(input, callbackOne);
         }
     };
+
     /* EXPORTS the psd-api in node */
     module.exports = pub;
-
 }).call(this);
