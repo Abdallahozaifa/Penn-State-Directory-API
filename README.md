@@ -101,12 +101,6 @@ Authors
 -------
 psd-api was created by Hozaifa Abdalla and Kenneth Schnall
 
-For More Information
---------------------
-
-+ Documentation is available at [Use psd-api](http://usejsdoc.org).
-+ Contribute to the docs at [psd-api](https://github.com/Abdallahozaifa/Penn-State-Directory-API).
-
 License
 -------
 
