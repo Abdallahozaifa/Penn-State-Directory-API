@@ -94,9 +94,6 @@ psd.get("hea113", callback);
 psd.get("hea113@psu.edu", callback);
 ```
 
-##Example
-Checkout this [fiddle]().
-
 Authors
 -------
 psd-api was created by Hozaifa Abdalla and Kenneth Schnall
