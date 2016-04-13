@@ -2,7 +2,7 @@
   "name": "psd-api",
   "version": "0.0.1",
   "description": "A Penn State Directory extractor that pretends to be an API",
-  "main": "psd-api.js",
+  "main": "src/psd-api.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abdallahozaifa/Penn-State-Directory-API.git"
@@ -27,7 +27,6 @@
   "dependencies": {
     "cheerio": "^0.20.0",
     "request": "^2.69.0",
-    "querystring": "^0.2.0",
-    "express": "^3.4.4"
+    "querystring": "^0.2.0"
   }
 }
