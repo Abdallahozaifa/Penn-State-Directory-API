@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/psd-api.svg)](https://badge.fury.io/js/psd-api)
 [![Build Status](https://travis-ci.org/Abdallahozaifa/Penn-State-Directory-API.svg?branch=master)](https://travis-ci.org/Abdallahozaifa/Penn-State-Directory-API)
 # Penn-State-Directory-API
-Penn State Directory scraper module that acts as an API.
+The Penn State Directory API.
 
 ##Installation
 
