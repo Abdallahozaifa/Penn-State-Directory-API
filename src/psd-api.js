@@ -345,4 +345,3 @@
      /* EXPORTS the psd-api in node */
      module.exports = pub;
  }).call(this);
- 

@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/psd-api.svg)](https://badge.fury.io/js/psd-api)
 # Penn-State-Directory-API
-Penn State Directory scraper module that acts as an API 
+Penn State Directory scraper module that acts as an API.
 
 ##Installation
 
@@ -101,7 +101,7 @@ psd.get("hea113@psu.edu", callback);
 
 Authors
 -------
-psd-api was created by Hozaifa Abdalla and Kenneth Schnall
+psd-api was created by Hozaifa Abdalla and Kenneth Schnall.
 
 License
 -------
