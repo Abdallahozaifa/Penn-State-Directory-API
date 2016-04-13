@@ -7,6 +7,10 @@
     var querystring = require('querystring');
     var cheerio = require('cheerio');
 
+    // Polyfill for Object.assign and String.endsWith
+    var objectAssign = require('object-assign');
+    require('string.prototype.endswith');
+
     /* Public object that will contain the public functions that are going to be exported */
     var pub = {};
     /* Private object that  will contain the private functions that will not be exported */
@@ -17,7 +21,7 @@
      *
      */
     var getStudent = function(options, callbackOne) {
-        priv.Student = {}, // student 
+        priv.Student = {}, // student
             priv.form = {}, // form
             priv.directoryPage = {}, // directory page that is returned from the server
             priv.directoryPage.desc = [], // description elements from the directory page
@@ -58,6 +62,7 @@
 
             /* Checks if passed in parameter is an email */
             email: function(str) {
+                //GOTEEM1
                 return str.endsWith("@psu.edu");
             },
 
@@ -77,22 +82,22 @@
             /* Determines if the option parameter is an object */
             isobjectValid: function() {
                 var objKeys = Object.keys(options);
-                
+
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
                 for(var i=0; i<objKeys.length; i++){
-                    
+
                     /* Validates first and last name and ensures that there is both of them */
                     if(objKeys[0] === 'firstName' && objKeys[1] === 'lastName'){
                         if ((typeof objKeys[0] != "string") && (typeof objKeys[1] != 'string')) {
                             throw new Error("Please provide the correct format for first and last name!");
                         }
                     }
-                    
+
                     /* Validates the user id */
                     else if(objKeys[0] === 'firstName' && objKeys[1] != 'lastName'){
                         throw new Error("Please provide a last name!");
                     }
-                    
+
                     /* Validates the user id */
                     else if (objKeys[i] === "userID") {
                         if (priv.validate.userID(options["userID"])) return true;
@@ -105,7 +110,7 @@
                             throw new Error("Invalid Object format!");
                         }
                     }
-                    
+
                     else {
                         throw new Error("Invalid Object format!");
                     }
@@ -131,7 +136,7 @@
 
         /**
         * @function
-        * Initializes the Student object depending on the passed in string. 
+        * Initializes the Student object depending on the passed in string.
         */
         priv.initStrStudent = function() {
             /* Checks if passed in parameter is an email */
@@ -158,14 +163,14 @@
         };
 
         /**
-        * @function 
+        * @function
         * Initializes the student information passed in as options.
         */
         priv.initStudent = function() {
             /* Checks if the passed in is valid object */
             if (typeof options === "object") {
                 if (priv.validate.isobjectValid()) {
-                    Object.assign(priv.Student, options);
+                    objectAssign(priv.Student, options);
                 }
             }
 
@@ -247,7 +252,7 @@
                 priv.studs.push(table);
                 // console.log(table);
             });
-             
+
             $(priv.selectors.DESC).each(function() {
                 priv.directoryPage.desc.push($(this).text());
             });
@@ -268,7 +273,7 @@
                 priv.Student[studProp] = priv.directoryPage.data[studKey];
             }
         };
-        
+
         /**
         * Queries the student page for the table headers and table data.
         * @function
