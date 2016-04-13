@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/psd-api.svg)](https://badge.fury.io/js/psd-api)
 # Penn-State-Directory-API
 penn state directory scraper module that acts as an API 
 
