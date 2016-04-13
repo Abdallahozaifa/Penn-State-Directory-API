@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "A Penn State Directory extractor that pretends to be an API",
   "main": "src/psd-api.js",
+  "scripts": {
+    "test": "mocha ./test/test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abdallahozaifa/Penn-State-Directory-API.git"
