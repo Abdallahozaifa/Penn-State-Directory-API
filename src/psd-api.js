@@ -79,7 +79,7 @@
                 var objKeys = Object.keys(options);
                 
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
-                for(var i=0; i < objKeys.length; i++){
+                for(var i=0; i<objKeys.length; i++){
                     
                     /* Validates first and last name and ensures that there is both of them */
                     if(objKeys[0] === 'firstName' && objKeys[1] === 'lastName'){
