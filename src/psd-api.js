@@ -62,7 +62,6 @@
 
             /* Checks if passed in parameter is an email */
             email: function(str) {
-                //GOTEEM1
                 return str.endsWith("@psu.edu");
             },
 
