@@ -31,5 +31,16 @@
     "cheerio": "^0.20.0",
     "request": "^2.69.0",
     "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "ghooks": "^1.1.1",
+    "mocha": "^2.4.5"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test"
+    }
   }
 }
