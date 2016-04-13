@@ -1,5 +1,5 @@
 # Penn-State-Directory-API
-< insert something more original here instead of copying everything I came up with, m'kay? -Yehya >
+penn state directory scraper module that acts as an API 
 
 ##Installation
 
