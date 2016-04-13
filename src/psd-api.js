@@ -19,16 +19,16 @@
      */
     var getStudent = function(options, callbackOne) {
         priv.Student = {}, // student 
-            priv.form = {}, // form 
             priv.desc = [], // description elements from the directory page
-            priv.data = []; // data elements from the directory page
+            priv.data = []; // data elements from the directory page\
+        priv.form = {}, // form
 
-        /* Selectors used for searching HTML */
-        priv.selectors = {
-            MATCHES: "b", // the number of MATCHES for each student
-            DESC: "th", // the descriptions of the student such as name, email, etc
-            DATA: "td" // the data for the descriptions
-        };
+            /* Selectors used for searching HTML */
+            priv.selectors = {
+                MATCHES: "b", // the number of MATCHES for each student
+                DESC: "th", // the descriptions of the student such as name, email, etc
+                DATA: "td" // the data for the descriptions
+            };
 
         /* Generates new query object for the form */
         priv.newQuery = function(firstName, lastName, userID, email) {
