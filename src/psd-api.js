@@ -76,27 +76,36 @@
 
             /* Determines if the option parameter is an object */
             isobjectValid: function() {
+                var objKeys = Object.keys(options);
+                
                 /* Checks every value in the options object and Incase the string contains non-alphabet characters */
-                for (var optKey in options) {
-                    /* Validates first and last name */
-                    if (optKey === "firstName" || optKey === "lastName") {
-                        if ((typeof options[optKey] != "string")) {
-                            throw new Error("Invalid Object format!");
+                for(var i=0; i < objKeys.length; i++){
+                    
+                    /* Validates first and last name and ensures that there is both of them */
+                    if(objKeys[0] === 'firstName' && objKeys[1] === 'lastName'){
+                        if ((typeof objKeys[0] != "string") && (typeof objKeys[1] != 'string')) {
+                            throw new Error("Please provide the correct format for first and last name!");
                         }
                     }
-
+                    
                     /* Validates the user id */
-                    else if (optKey === "userID") {
+                    else if(objKeys[0] === 'firstName' && objKeys[1] != 'lastName'){
+                        throw new Error("Please provide a last name!");
+                    }
+                    
+                    /* Validates the user id */
+                    else if (objKeys[i] === "userID") {
                         if (priv.validate.userID(options["userID"])) return true;
                         else return false;
                     }
 
                     /* Validates the email */
-                    else if (optKey === "email") {
-                        if ((priv.validate.email(options[optKey]) === false)) {
+                    else if (objKeys[i] === "email") {
+                        if ((priv.validate.email(options['email']) === false)) {
                             throw new Error("Invalid Object format!");
                         }
                     }
+                    
                     else {
                         throw new Error("Invalid Object format!");
                     }
@@ -142,7 +151,8 @@
                     priv.fillStudentObj(input[0], input[1]);
                 }
                 else {
-                    priv.fillStudentObj(input[0], "", "", "");
+                    console.error("Please enter a first and last name!");
+                    return;
                 }
             }
         };
@@ -284,7 +294,7 @@
                 priv.getStudentInfo($);
             }
             else {
-                if (options != "") console.error("Student was not found!");
+                if (options != "") priv.Student = null;
                 else console.error("Please enter a student!");
             }
         };
