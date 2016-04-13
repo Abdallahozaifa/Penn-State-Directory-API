@@ -19,8 +19,8 @@
     "scrape"
   ],
   "author": [
-      "Hozaifa Abdalla <Abdallahozaifa19527@gmail.com> (http://hozaifaabdalla.com/)",
-      "Kenneth Schnall <kas6570@psu.edu> (https://kensch.com/)"
+    "Hozaifa Abdalla <Abdallahozaifa19527@gmail.com> (http://hozaifaabdalla.com/)",
+    "Kenneth Schnall <kas6570@psu.edu> (https://kensch.com/)"
   ],
   "license": "MIT",
   "bugs": {
@@ -29,8 +29,10 @@
   "homepage": "https://github.com/Abdallahozaifa/Penn-State-Directory-API#readme",
   "dependencies": {
     "cheerio": "^0.20.0",
+    "object-assign": "^4.0.1",
+    "querystring": "^0.2.0",
     "request": "^2.69.0",
-    "querystring": "^0.2.0"
+    "string.prototype.endswith": "^0.2.0"
   },
   "devDependencies": {
     "chai": "~3.5.0",
