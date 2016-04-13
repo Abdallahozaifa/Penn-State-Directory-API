@@ -1,5 +1,5 @@
 # Penn-State-Directory-API
-A Penn State Directory scraper that pretends to be the psd-api
+< insert something more original here instead of copying everything I came up with, m'kay? -Yehya >
 
 ##Installation
 
