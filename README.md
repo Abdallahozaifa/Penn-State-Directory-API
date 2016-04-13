@@ -19,12 +19,15 @@ npm install git+https://github.com/Abdallahozaifa/Penn-State-Directory-API
 ###Node.js
 
 ```javascript
+/* Creating an instance of the psd scraper */
 var psd = require("psd-api");
 
+/* Callback that will execute once the students information is received */
 var callback = function(student) {    
     console.log(student);
 };
 
+/* Obtaining the students information */
 psd.get("Hozaifa Abdalla", callback);
 ```
 
@@ -48,36 +51,37 @@ Obtaining students
 ```javascript
 var psd = require("psd-api");
 
-// Search with first and last names
+/* Search with first and last names */
 psd.get({firstName: "Hozaifa", lastName: "Abdalla"}, callback);
 
-// Search with userID
+/* Search with userID */
 psd.get({userID: "hea113"}, callback);
 
-// Search with email
+/* Search with email */
 psd.get({email: "hea113@psu.edu"}, callback);
 
-// Search with first name, last name, userID, and email
+/* Search with first name, last name, userID, and email */
 psd.get({firstName: "Hozaifa", lastName: "Abdalla", userID: "hea113", email: "hea113@psu.edu"}, callback);
 ```
 
 **psd.get(array, callback)**
 
 ```javascript
+/* Defining an array of students to be searched */
 var students = [{firstName:"Hozaifa", lastName: "Abdalla"}, {firstName: "Kenneth", lastName: "Schnall"}];
 
-// callback that will handle each student 
+/* callback that will handle each student */
 var callback = function(student){
     console.log(student);
 }
 
-// Search an array of students 
+/* Search an array of students */
 psd.get(students, callback);
 
 ```
 or
 ```javascript
-// Search multiple students using iteration
+/* Search multiple students using iteration */
 for(var student in students){
     psd.get(student,callback);
 }
@@ -85,13 +89,13 @@ for(var student in students){
 
 **psd.get(string, callback)**
 ```javascript
-// Search with first and last names
+/* Search with first and last names */
 psd.get("Hozaifa Abdalla", callback);
 
-// Search with userID
+/* Search with userID */
 psd.get("hea113", callback);
 
-// Search with email
+/* Search with email */
 psd.get("hea113@psu.edu", callback);
 ```
 
