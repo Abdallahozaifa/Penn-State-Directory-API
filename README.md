@@ -101,7 +101,7 @@ psd.get("hea113@psu.edu", callback);
 
 Authors
 -------
-psd-api was created by Hozaifa Abdalla and Kenneth Schnall
+psd-api was created by Hozaifa Abdalla and Kenneth Schnall.
 
 License
 -------
