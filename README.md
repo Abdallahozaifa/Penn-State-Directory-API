@@ -1,5 +1,6 @@
 [![npm version](https://badge.fury.io/js/psd-api.svg)](https://badge.fury.io/js/psd-api)
 [![Build Status](https://travis-ci.org/Abdallahozaifa/Penn-State-Directory-API.svg?branch=master)](https://travis-ci.org/Abdallahozaifa/Penn-State-Directory-API)
+[![downloads](https://img.shields.io/npm/dm/psd-api.svg?maxAge=25920)](https://www.npmjs.com/package/psd-api)
 # Penn-State-Directory-API
 The Penn State Directory API.
 
