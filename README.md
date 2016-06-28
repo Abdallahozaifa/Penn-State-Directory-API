@@ -105,6 +105,10 @@ Authors
 -------
 psd-api was created by Hozaifa Abdalla and Kenneth Schnall.
 
+Demo
+-------
+Try live demo <a href="https://tonicdev.com/npm/psd-api">here</a>.
+
 License
 -------
 
