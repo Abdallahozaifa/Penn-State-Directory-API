@@ -152,24 +152,24 @@ describe('psd',function(){
             });
         });
         
-        it('expected to find Hozaifa Abdalla, Kenneth Schnall, and Yehya Awad using penn state ids in object format in an array', function(done){
-            this.timeout(7000);
-            var kFound = false, hFound = false, yFound = false;
-            var students = [{userID: "hea113"}, {userID: "kas6570"},{userID: "yha5009"}];
-            psd.get(students, function(student){
-                var ken = "KENNETH ALEXANDER SCHNALL", hozaifa = "HOZAIFA ELHAFIZ ABDALLA", yehya = "YEHYA HOSSAM SAID ABDALLA AWAD";
-                switch(student.Name){ 
-                    case ken: kFound = true; break;
-                    case hozaifa: hFound = true; break;
-                    case yehya: yFound = true; break;
-                }
+        // it('expected to find Hozaifa Abdalla, Kenneth Schnall, and Yehya Awad using penn state ids in object format in an array', function(done){
+        //     this.timeout(7000);
+        //     var kFound = false, hFound = false, yFound = false;
+        //     var students = [{userID: "hea113"}, {userID: "kas6570"},{userID: "yha5009"}];
+        //     psd.get(students, function(student){
+        //         var ken = "KENNETH ALEXANDER SCHNALL", hozaifa = "HOZAIFA ELHAFIZ ABDALLA", yehya = "YEHYA HOSSAM SAID ABDALLA AWAD";
+        //         switch(student.Name){ 
+        //             case ken: kFound = true; break;
+        //             case hozaifa: hFound = true; break;
+        //             case yehya: yFound = true; break;
+        //         }
                 
-                if(kFound === true && hFound === true && yFound === true){
-                    assert.equal(true,true);
-                    done();
-                }
-            });
-        });  
+        //         if(kFound === true && hFound === true && yFound === true){
+        //             assert.equal(true,true);
+        //             done();
+        //         }
+        //     });
+        // });  
    });      
 });
 
